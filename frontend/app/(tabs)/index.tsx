@@ -1,3 +1,10 @@
+// index.tsx
+// Lobby/onboarding placeholder screen. To be further refined:
+//   - Player name entry
+//   - Game lobby (waiting for host to start)
+//   - Team assignment
+// See planning/PRD V1.md for full lobby requirements.
+
 import React from 'react';
 import { View, Text, StyleSheet } from 'react-native';
 

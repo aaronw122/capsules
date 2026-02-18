@@ -1,3 +1,16 @@
+// ARWorldMapModule.swift
+// React Native native module — the Swift side of the JS bridge.
+// This is an RCTEventEmitter, meaning it can both:
+//   - Receive method calls from JS (startSession, placeCapsules)
+//   - Send events to JS (onCapsuleTapped, onRelocalized, onTrackingStateChanged)
+//
+// It holds a reference to the ARWorldMapView instance (set by ARWorldMapViewManager
+// when the view is created) and forwards method calls to it. Events flow the
+// other direction: the view calls closures, this module converts them to
+// sendEvent() calls that cross the bridge.
+//
+// ObjC bridge declarations are in ARWorldMapModule.m (required by RN architecture).
+
 import Foundation
 import React
 

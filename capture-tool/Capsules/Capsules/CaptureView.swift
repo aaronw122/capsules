@@ -1,3 +1,17 @@
+// CaptureView.swift
+// SwiftUI UI for the capture tool. Combines three responsibilities:
+//   1. CaptureView — main screen with status bar + control buttons
+//   2. ARViewContainer — UIViewRepresentable that bridges ARSCNView into SwiftUI
+//   3. ShareSheet — UIActivityViewController wrapper for AirDropping files
+//
+// Ported from prototype's ContentView.swift + ARViewContainer.swift.
+// Removed: mode picker (always capture), "Reload Map" button.
+// Added: "Export Positions" and "Share Files" buttons.
+//
+// Button layout at bottom of screen:
+//   [Save Map]     [Export Positions]
+//   [Share Files]  [Reset]
+
 import SwiftUI
 import ARKit
 
@@ -109,6 +123,8 @@ struct CaptureView: View {
 }
 
 // MARK: - AR View Container
+// Bridges ARKit's ARSCNView (UIKit) into SwiftUI. The Coordinator handles
+// the tap gesture and forwards it to CaptureManager.handleTap(at:).
 
 struct ARViewContainer: UIViewRepresentable {
     let manager: CaptureManager
@@ -144,6 +160,8 @@ struct ARViewContainer: UIViewRepresentable {
 }
 
 // MARK: - Share Sheet
+// Wraps UIActivityViewController for SwiftUI. Used to AirDrop arworldmap.data
+// and positions.json to the dev Mac after a capture session.
 
 struct ShareSheet: UIViewControllerRepresentable {
     let items: [Any]

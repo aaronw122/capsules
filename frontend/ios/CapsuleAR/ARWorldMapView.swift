@@ -1,3 +1,18 @@
+// ARWorldMapView.swift
+// The core AR view for the React Native app. Subclasses ARSCNView to provide:
+//   - World map loading + relocalization (player returns to the mapped venue)
+//   - Capsule rendering (colored spheres at positions from positions.json)
+//   - Tap detection (SCNHitTest → walk node hierarchy → find capsule ID)
+//
+// This is the PLAY-mode counterpart to the capture tool's CaptureManager.
+// The capture tool places capsules and saves the world map.
+// This view loads that world map and renders capsules for players to find.
+//
+// Communication with JS is indirect — callbacks (onCapsuleTapped, onRelocalized,
+// onTrackingStateChanged) are set by ARWorldMapModule.swift, which converts
+// them to RCTEventEmitter events that cross the bridge to JS.
+//
+
 import ARKit
 import SceneKit
 import UIKit
@@ -5,6 +20,7 @@ import UIKit
 class ARWorldMapView: ARSCNView, ARSCNViewDelegate, ARSessionDelegate {
 
     private var isRelocalized = false
+    private var lastTrackingStatus: String = ""
     var onCapsuleTapped: ((_ capsuleId: String) -> Void)?
     var onRelocalized: (() -> Void)?
     var onTrackingStateChanged: ((_ status: String) -> Void)?
@@ -24,7 +40,7 @@ class ARWorldMapView: ARSCNView, ARSCNViewDelegate, ARSessionDelegate {
         fatalError("init(coder:) has not been implemented")
     }
 
-    // MARK: - Session
+    // Session
 
     func startSession() {
         let config = ARWorldTrackingConfiguration()
@@ -51,7 +67,12 @@ class ARWorldMapView: ARSCNView, ARSCNViewDelegate, ARSessionDelegate {
         }
     }
 
-    // MARK: - Place capsules
+    // Place capsules
+    // Called from JS via ARWorldMapModule.placeCapsules().
+    // Each capsule dict has { id: String, position: [Double], color: String }.
+    // Creates an ARAnchor at each position — the renderer callback then
+    // attaches a colored sphere. Colors are stored in capsuleColors dict
+    // and looked up by anchor name in renderer(_:didAdd:for:).
 
     func placeCapsules(capsules: [[String: Any]]) {
         for capsule in capsules {
@@ -59,6 +80,8 @@ class ARWorldMapView: ARSCNView, ARSCNViewDelegate, ARSessionDelegate {
                   let position = capsule["position"] as? [Double],
                   position.count == 3 else { continue }
 
+            // CONFIGURABLE: Fallback color if capsule has no color defined in capsuleContent.json.
+            // Gold (#FFD700) is the default. Change to match your game's theme.
             let color = capsule["color"] as? String ?? "#FFD700"
 
             var transform = matrix_identity_float4x4
@@ -76,10 +99,17 @@ class ARWorldMapView: ARSCNView, ARSCNViewDelegate, ARSessionDelegate {
 
     private var capsuleColors: [String: UIColor] = [:]
 
-    // MARK: - Tap handling
+    // Tap handling
+    // Uses SceneKit hit testing (not ARKit raycasting) to find which 3D node
+    // the user tapped. Walks up the node parent chain to find one with a name
+    // (our capsule IDs are set as node.name). This handles the case where the
+    // user taps a child node of the capsule's anchor node.
 
     @objc private func handleTap(_ gesture: UITapGestureRecognizer) {
         let location = gesture.location(in: self)
+        // CONFIGURABLE: searchMode .all checks every node. Use .closest for
+        // better performance if you have many capsules (50+), but .all is safer
+        // for small counts since it won't miss occluded spheres.
         let hitResults = hitTest(location, options: [
             SCNHitTestOption.searchMode: SCNHitTestSearchMode.all.rawValue
         ])
@@ -97,21 +127,28 @@ class ARWorldMapView: ARSCNView, ARSCNViewDelegate, ARSessionDelegate {
         }
     }
 
-    // MARK: - ARSCNViewDelegate
+    // ARSCNViewDelegate
 
     func renderer(_ renderer: any SCNSceneRenderer, didAdd node: SCNNode, for anchor: ARAnchor) {
         guard let name = anchor.name, !name.isEmpty else { return }
 
         let color = capsuleColors[name] ?? .systemYellow
 
+        // CONFIGURABLE: Sphere radius in meters. 0.05 = 5cm diameter.
+        // Should match the capture tool's sphere size so what you see during
+        // capture is what players see. Increase for easier tapping on device.
         let sphere = SCNSphere(radius: 0.05)
         sphere.firstMaterial?.diffuse.contents = color
+        // CONFIGURABLE: Lighting model. .physicallyBased gives realistic shading.
+        // Use .constant for flat color (no shading), .blinn for simpler lighting.
         sphere.firstMaterial?.lightingModel = .physicallyBased
 
         let sphereNode = SCNNode(geometry: sphere)
         sphereNode.name = name
         node.addChildNode(sphereNode)
 
+        // CONFIGURABLE: Hover animation — height (meters) and duration (seconds).
+        // 0.02m up/down over 1s = gentle floating effect. Set to 0 to disable.
         let hover = SCNAction.sequence([
             SCNAction.moveBy(x: 0, y: 0.02, z: 0, duration: 1.0),
             SCNAction.moveBy(x: 0, y: -0.02, z: 0, duration: 1.0)
@@ -119,26 +156,29 @@ class ARWorldMapView: ARSCNView, ARSCNViewDelegate, ARSessionDelegate {
         sphereNode.runAction(SCNAction.repeatForever(hover))
     }
 
-    // MARK: - ARSessionDelegate
+    // ARSessionDelegate
 
     func session(_ session: ARSession, didUpdate frame: ARFrame) {
         let status = frame.worldMappingStatus
 
+        let statusStr: String
         switch status {
-        case .mapped:
-            onTrackingStateChanged?("mapped")
-            if !isRelocalized {
-                isRelocalized = true
-                onRelocalized?()
-            }
-        case .extending:
-            onTrackingStateChanged?("extending")
-        case .limited:
-            onTrackingStateChanged?("limited")
-        case .notAvailable:
-            onTrackingStateChanged?("notAvailable")
-        @unknown default:
-            onTrackingStateChanged?("unknown")
+        case .mapped: statusStr = "mapped"
+        case .extending: statusStr = "extending"
+        case .limited: statusStr = "limited"
+        case .notAvailable: statusStr = "notAvailable"
+        @unknown default: statusStr = "unknown"
+        }
+
+        // Only fire the event when the status actually changes (not every frame)
+        if statusStr != lastTrackingStatus {
+            lastTrackingStatus = statusStr
+            onTrackingStateChanged?(statusStr)
+        }
+
+        if status == .mapped && !isRelocalized {
+            isRelocalized = true
+            onRelocalized?()
         }
     }
 
@@ -147,7 +187,8 @@ class ARWorldMapView: ARSCNView, ARSCNViewDelegate, ARSessionDelegate {
     }
 }
 
-// MARK: - UIColor hex helper
+// UIColor hex helper
+// Converts hex color strings from capsuleContent.json (e.g. "#FF6B6B") to UIColor.
 
 extension UIColor {
     convenience init(hex: String) {
