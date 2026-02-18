@@ -21,7 +21,7 @@ There are 7 best practice approaches that will be implemented as part of this pr
 
 **5a.** **PR** **Template**
 
-**Why:** Forces you to explain *what* and *why* before asking for a review. The reviewer shouldn't have to guess.
+**Why:** Forces you to explain _what_ and _why_ before asking for a review. The reviewer shouldn't have to guess.
 
 **5b.** **Small** **PRs**
 
@@ -41,28 +41,28 @@ There are 7 best practice approaches that will be implemented as part of this pr
 
 **How**
 
+**Branch Naming Conventions**
+bug fix: 'fix/[short description]'
+feature: 'feat/[short description]'
+non-code related: 'chore/[short description]'
+
 Github
 
 1. **Init repo, push to GitHub**
-    1. Aaron defined
+   1. Aaron defined
 2. **Install ESLint + Prettier, create configs**
-    
-    npm install -D eslint @typescript-eslint/parser @typescript-eslint/eslint-plugin
-    
-    **Mobile** **(React** **Native** **+** **TypeScript):**
-    
-    npm install -D eslint @react-native/eslint-config
-    
-    Keep rules minimal to start — catch real bugs, not style opinions:
-    
-    - no-unused-vars (error)
-    
-    - no-console (warn — flag but don't block)
-    
-    - @typescript-eslint/no-explicit-any (warn)
-    
-    - @typescript-eslint/no-floating-promises (error — critical for async bugs)
-    
+
+   npm install -D eslint @typescript-eslint/parser @typescript-eslint/eslint-plugin
+
+   **Mobile** **(React** **Native** **+** **TypeScript):**
+
+   npm install -D eslint @react-native/eslint-config
+
+   Keep rules minimal to start — catch real bugs, not style opinions:
+   - no-unused-vars (error)
+   - no-console (warn — flag but don't block)
+   - @typescript-eslint/no-explicit-any (warn)
+   - @typescript-eslint/no-floating-promises (error — critical for async bugs)
 
 **3.** **Formatting** **(Prettier)**
 
@@ -84,7 +84,7 @@ One .prettierrc at the repo root, shared by server and mobile, run it through ES
 
 Run Prettier through ESLint (not separately) using eslint-config-prettier so there's one tool to run, not two.
 
-4. **Install Husky + lint-staged, create hooks** 
+4. **Install Husky + lint-staged, create hooks**
 
 # Install
 
@@ -102,9 +102,9 @@ npx lint-staged
 
 "lint-staged": {
 
-"*.{ts,tsx}": ["eslint --fix", "prettier --write"],
+"\*.{ts,tsx}": ["eslint --fix", "prettier --write"],
 
-"*.{json,md}": ["prettier --write"]
+"\*.{json,md}": ["prettier --write"]
 
 }
 
@@ -118,7 +118,7 @@ cd ../mobile && npm test
 
 This means: commits are fast (lint + format only), pus
 
-5 **Add PR template** 
+5 **Add PR template**
 
 ## What to look at
 
@@ -158,7 +158,7 @@ This means: commits are fast (lint + format only), pus
 
 - Are there tests for the new behaviour?
 
-6. **Add GitHub Actions CI workflow** 
+6. **Add GitHub Actions CI workflow**
 
 **.github/workflows/ci.yml:**
 
@@ -224,7 +224,7 @@ node-version: 20
 
 - run: npm test
 
-7. **Set branch protection rules** 
+7. **Set branch protection rules**
 
 In GitHub repo settings → Branches → Add rule for main:
 
@@ -239,20 +239,20 @@ Team: everyone clones, runs npm install (hooks install automatically)
 Standardising Work Product
 
 - Linting
-    - Checks for risky patterns in code that are syntactically valid but may cause bugs or performance issues
-    - Suggested tool: ESLin
+  - Checks for risky patterns in code that are syntactically valid but may cause bugs or performance issues
+  - Suggested tool: ESLin
 - Formatting
-    - Style sheets etc. to ensure consistency of formatting.
+  - Style sheets etc. to ensure consistency of formatting.
 - Testing
-    - With Ai coding, deep test coverage is easier than evert.
-    - All tests should pass before mergig a PR to keeo the build “green”
-    - Realistic environment before releasing to production.
-    - Automate linting, formatting, and testing with precommit hooks (try Husky: https://typicode.github.io/husky)
+  - With Ai coding, deep test coverage is easier than evert.
+  - All tests should pass before mergig a PR to keeo the build “green”
+  - Realistic environment before releasing to production.
+  - Automate linting, formatting, and testing with precommit hooks (try Husky: https://typicode.github.io/husky)
 - Prs
-    - Description google.github.io/eng-practices/review/developer/cl-descriptions.html
-    - Size
-        - Favour small Prs, shares knowledge across teams
-        - Google’s best practice - google.github.io/eng-practices/review/developer/cl-small-cls.html
-    - Code Review
-        - Always self review
-        - Best practices - google.github.io/eng-practices/review/reviewer/looking-for.html
+  - Description google.github.io/eng-practices/review/developer/cl-descriptions.html
+  - Size
+    - Favour small Prs, shares knowledge across teams
+    - Google’s best practice - google.github.io/eng-practices/review/developer/cl-small-cls.html
+  - Code Review
+    - Always self review
+    - Best practices - google.github.io/eng-practices/review/reviewer/looking-for.html

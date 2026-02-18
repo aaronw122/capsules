@@ -56,34 +56,31 @@ When done, Erik exports:
 
 **worldmap.arworldmap** — the ARWorldMap binary.
 
-Both files are AirDropped to the team and uploaded to the server.
+Both files are AirDropped to the team. Positions are merged with content into `backend/data/capsules.json`.
 
-### Phase B — Content Authoring (separate step)
+### Phase B — Content Authoring + Merge (one-time setup)
 
-Someone maps each position ID to game content:
+Someone merges Erik's positions with game content into a single `capsules.json` on the server:
 
 ```json
 [
   {
     "id": "asd124b",
+    "position": [2.1, 0.5, -3.4],
     "label": "Beckham",
     "letter": "F",
-    "sequence": 2,
     "content": { "name": "Beckham", "funFact": "..." }
   }
 ]
 ```
 
-This is a manual step — "the capsule I placed by the window is Beckham's."
+This file lives at `backend/data/capsules.json` — single source of truth. Update it without rebuilding the app.
 
-### Phase C — Runtime Merge (RN on app load)
+### Phase C — Client Fetch + Split (RN on app load)
 
 ```typescript
-// Merge positions + content by ID
-const capsules = positions.map(pos => ({
-  ...pos,
-  ...contentMap[pos.id],
-}));
+// Fetch merged capsule data from server
+const capsules = await fetch("/capsules").then(r => r.json());
 
 // Split for each layer
 const forSwift = capsules.map(c => ({ id: c.id, position: c.position }));
@@ -176,18 +173,20 @@ The AR view and the RN UI are **stacked layers**, not interleaved. Swift handles
 > Maps to the diagram's **Sequence** box: "app loads ARWorldMap binary → hands it to ARKit via Swift → user looks around → ARKit matches visual features, fires onRelocalized → React Native reads capsule positions JSON, renders objects at those coordinates."
 
 ```
-positions.json ─┐
-                 ├→ capsuleLoader.ts ─→ forSwift [{id, position}]
-capsuleContent.json ┘        │              ↓
-                              │     ARWorldMapModule.placeCapsules()
-                              │              ↓
-                              │     Swift creates SCNNodes (node.name = id)
-                              │
-                              └─→ forState [{id, label, letter, content}]
-                                         ↓
-                                  RN game state (lookup by id)
-                                         ↑
-                              onCapsuleTapped("asd124b")
-                                         ↑
-                              Swift bridge event (id only)
+GET /capsules (server serves backend/data/capsules.json)
+       ↓
+  Client splits response
+       ├─→ forSwift [{id, position}]
+       │         ↓
+       │   ARWorldMapModule.placeCapsules()
+       │         ↓
+       │   Swift creates SCNNodes (node.name = id)
+       │
+       └─→ forState [{id, label, letter, content}]
+                    ↓
+             RN game state (lookup by id)
+                    ↑
+         onCapsuleTapped("asd124b")
+                    ↑
+         Swift bridge event (id only)
 ```

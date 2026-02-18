@@ -1,3 +1,7 @@
 .claude
 node_modules
 CLAUDE.md
+*.xcuserstate
+xcuserdata/
+DerivedData/
+.DS_Store
