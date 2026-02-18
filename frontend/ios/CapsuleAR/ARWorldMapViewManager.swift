@@ -16,7 +16,7 @@ class ARWorldMapViewManager: RCTViewManager {
     }
 
     override func view() -> UIView! {
-        let arView = ARWorldMapView()
+        let arView = ARWorldMapView(frame: .zero)
 
         // Link the view to the module so events flow through
         if let module = self.bridge.module(for: ARWorldMapModule.self) as? ARWorldMapModule {
