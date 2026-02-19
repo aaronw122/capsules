@@ -7,25 +7,32 @@
 
 import React from 'react';
 import { View, Text, StyleSheet, Button } from 'react-native';
-
 import { NavigationProp } from '@react-navigation/native';
 
-export default function Onboarding({
+export default function Call({
   navigation,
 }: {
   navigation: NavigationProp<any>;
 }) {
   return (
     <View style={styles.container}>
-      <Text style={styles.title}>Fractal U</Text>
       <Text style={styles.subtitle}>
-        The year is 2126. Hologram Andrew is asking to interface - do you
-        accept?{' '}
+        Fractals best cohort ever from 100 years ago decided to pull one last
+        prank.
       </Text>
-      <Button
-        title="Accept the call"
-        onPress={() => navigation.navigate('Call')}
-      />
+      <Text style={styles.subtitle}>
+        all the doors are locked. they require a 17 letter passcode.{' '}
+      </Text>
+      <Text style={styles.subtitle}>
+        {' '}
+        17 Virtual capsules have been placed all around the room, each of them
+        contain a part of the passcode.
+      </Text>
+      <Text style={styles.subtitle}>
+        {' '}
+        find all 17 capsules to get the passcode and escape!!!{' '}
+      </Text>
+      <Button title="Continue" onPress={() => navigation.navigate('Login')} />
     </View>
   );
 }

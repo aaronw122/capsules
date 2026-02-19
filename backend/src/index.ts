@@ -19,11 +19,20 @@ app.get('/capsules', (req, res) => {
 app.post('/add/player', (req, res) => {
   const body = req.body; // parse request for its body object
 
-  leaderboard.push(body.player); // add player object in request body to leaderboard array
+  //need to update player w UUID:
+
+  const newPlayer = {
+    id: crypto.randomUUID(),
+    name: body.name,
+    capsules: 0,
+    completedAt: null,
+  };
+
+  leaderboard.push(newPlayer); // add player object in request body to leaderboard array
 
   // COMMENT: WHEN WEBSOCKETS ARE MADE, BROADCAST NEW STATE OF LEADERBOARD EVERYTIME LEADERBOARD GETS UPDATED
 
-  res.status(200).json({ message: 'Player added to leaderboard' });
+  res.json(newPlayer);
 });
 
 const PORT = 3000;
