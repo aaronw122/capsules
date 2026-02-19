@@ -1,7 +1,7 @@
 import { useContext, createContext, useState } from 'react';
 import Config from 'react-native-config';
 
-import { GameContext, type PlayerState } from '../types';
+import { GameContext, LeaderBoard, type PlayerState } from '../types';
 
 const baseURL = Config.BASE_URL;
 
@@ -26,6 +26,7 @@ export const useGame = () => {
 export function GameProvider({ children }: { children: React.ReactNode }) {
   const [playerState, setPlayerState] = useState<null | PlayerState>(null);
   const [newName, setNewName] = useState<string>('');
+  const [leaderBoard, setLeaderBoard] = useState<[] | LeaderBoard[]>([]);
 
   const handleNameChange = (text: string) => {
     setNewName(text);
@@ -40,7 +41,9 @@ export function GameProvider({ children }: { children: React.ReactNode }) {
     }
   */
 
-  //fire this once gameState changes to 'playing'
+  //websockets will receive updated leaderboard from server.
+
+  //fire this once the user goes to lobby
   const createPlayer = async (): Promise<PlayerState> => {
     const playerObj = {
       name: newName,

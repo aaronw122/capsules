@@ -9,6 +9,7 @@
 
 import React, { useEffect, useState } from 'react';
 import { View, Text, Alert, StyleSheet } from 'react-native';
+//import map view and map module
 import { ARWorldMapView } from '../native/ARWorldMapView';
 import ARWorldMapModule from '../native/ARWorldMapModule';
 
