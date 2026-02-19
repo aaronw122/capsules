@@ -28,13 +28,12 @@ class ARWorldMapModule: RCTEventEmitter {
     }
 
     override func supportedEvents() -> [String]! {
-        return ["onCapsuleTapped", "onRelocalized", "onTrackingStateChanged", "onViewReady"]
+        return ["onCapsuleTapped", "onRelocalized", "onTrackingStateChanged"]
     }
 
     // Called by ARWorldMapViewManager to link the view
     func setARView(_ view: ARWorldMapView) {
         self.arView = view
-        print("[ARWorldMapModule] AR view linked")
 
         view.onCapsuleTapped = { [weak self] capsuleId in
             self?.sendEvent(withName: "onCapsuleTapped", body: ["capsuleId": capsuleId])
@@ -47,17 +46,11 @@ class ARWorldMapModule: RCTEventEmitter {
         view.onTrackingStateChanged = { [weak self] status in
             self?.sendEvent(withName: "onTrackingStateChanged", body: ["status": status])
         }
-
-        // Notify JS that the native view is ready to receive commands
-        self.sendEvent(withName: "onViewReady", body: nil)
     }
 
     @objc func startSession(_ worldMapBase64: String) {
         DispatchQueue.main.async { [weak self] in
-            guard let self = self, let view = self.arView else {
-                print("[ARWorldMapModule] startSession failed — arView is nil")
-                return
-            }
+            guard let self = self, let view = self.arView else { return }
 
             if worldMapBase64.isEmpty {
                 view.startSession()
@@ -71,34 +64,10 @@ class ARWorldMapModule: RCTEventEmitter {
         }
     }
 
-    @objc func startSessionFromBundle(_ filename: String) {
-        DispatchQueue.main.async { [weak self] in
-            guard let self = self, let view = self.arView else {
-                print("[ARWorldMapModule] startSessionFromBundle failed — arView is nil")
-                return
-            }
-
-            guard let url = Bundle.main.url(forResource: filename, withExtension: nil),
-                  let data = try? Data(contentsOf: url) else {
-                print("[ARWorldMapModule] No bundled world map '\(filename)' found, starting without map")
-                view.startSession()
-                return
-            }
-            print("[ARWorldMapModule] Loading bundled world map: \(filename)")
-            view.loadWorldMap(data: data)
-        }
-    }
-
     @objc func placeCapsules(_ capsules: NSArray) {
         DispatchQueue.main.async { [weak self] in
-            guard let self = self, let view = self.arView else {
-                print("[ARWorldMapModule] placeCapsules failed — arView is nil")
-                return
-            }
-            guard let capsuleArray = capsules as? [[String: Any]] else {
-                print("[ARWorldMapModule] placeCapsules failed — invalid capsule array format")
-                return
-            }
+            guard let self = self, let view = self.arView else { return }
+            guard let capsuleArray = capsules as? [[String: Any]] else { return }
             view.placeCapsules(capsules: capsuleArray)
         }
     }
