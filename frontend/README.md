@@ -8,6 +8,9 @@ This is a new [**React Native**](https://reactnative.dev) project, bootstrapped 
 
 Pre-reqs: iOS simulator
 
-**to run**: 'bun run ios'
+**to run**:
+
+1. CD into iOS.
+2. 'bun run ios'
 
 **to see logs**: type j in metro to open up logger.
