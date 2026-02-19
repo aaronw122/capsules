@@ -6,15 +6,20 @@
 //       placeCapsules() → renderer renders spheres → tap fires JS event
 
 import React, { useEffect, useState } from 'react';
-import { View, Text, Alert, StyleSheet } from 'react-native';
+import { View, Text, Alert, StyleSheet, Button } from 'react-native';
 //import map view and map module
 import { ARWorldMapView } from '../native/ARWorldMapView';
 import ARWorldMapModule from '../native/ARWorldMapModule';
 import { loadCapsules } from '../game/capsuleLoader';
 import CapsuleDetail from '../components/CapsuleDetail';
 import type { Capsule } from '../types';
+import { NavigationProp } from '@react-navigation/native';
 
-export default function ARScreen() {
+export default function ARScreen({
+  navigation,
+}: {
+  navigation: NavigationProp<any>;
+}) {
   const [trackingStatus, setTrackingStatus] = useState('initializing');
   const [relocalized, setRelocalized] = useState(false);
   const [selectedCapsule, setSelectedCapsule] = useState<Capsule | null>(null);
@@ -71,6 +76,10 @@ export default function ARScreen() {
         <Text style={styles.statusText}>
           Relocalized: {relocalized ? 'Yes' : 'No'}
         </Text>
+        <Button
+          onPress={() => navigation.navigate('LeaderBoard')}
+          title="test leaderboard"
+        />
       </View>
       {selectedCapsule && (
         <CapsuleDetail

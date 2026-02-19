@@ -1,7 +1,12 @@
-import { useContext, createContext, useState } from 'react';
+import { useContext, createContext, useState, useEffect } from 'react';
 import Config from 'react-native-config';
 
-import { GameContext, LeaderBoard, type PlayerState } from '../types';
+import {
+  GameContext,
+  GameState,
+  LeaderBoard,
+  type PlayerState,
+} from '../types';
 
 const baseURL = Config.BASE_URL;
 
@@ -17,6 +22,12 @@ Name
 leaderBoard
 */
 
+const mockLeaderBoard: LeaderBoard = [
+  { id: 'a1b2c3', name: 'Alice', capsules: 5, completedAt: null, rank: 1 },
+  { id: 'd4e5f6', name: 'Bob', capsules: 3, completedAt: null, rank: 2 },
+  { id: 'g7h8i9', name: 'Charlie', capsules: 1, completedAt: null, rank: 3 },
+];
+
 const gameContext = createContext<GameContext | null>(null);
 
 export const useGame = () => {
@@ -26,7 +37,8 @@ export const useGame = () => {
 export function GameProvider({ children }: { children: React.ReactNode }) {
   const [playerState, setPlayerState] = useState<null | PlayerState>(null);
   const [newName, setNewName] = useState<string>('');
-  const [leaderBoard, setLeaderBoard] = useState<[] | LeaderBoard[]>([]);
+  const [leaderBoard, setLeaderBoard] = useState<[] | LeaderBoard>([]);
+  const [gameState, setGameState] = useState<null | GameState>(null);
 
   const handleNameChange = (text: string) => {
     setNewName(text);
@@ -41,9 +53,13 @@ export function GameProvider({ children }: { children: React.ReactNode }) {
     }
   */
 
-  //websockets will receive updated leaderboard from server.
+  //websockets will receive updated leaderboard from server. add mock data for now.
 
-  //fire this once the user goes to lobby
+  useEffect(() => {
+    setLeaderBoard(mockLeaderBoard);
+  }, []);
+
+  //fire this once the user submit name
   const createPlayer = async (): Promise<PlayerState> => {
     const playerObj = {
       name: newName,
@@ -77,6 +93,8 @@ export function GameProvider({ children }: { children: React.ReactNode }) {
         newName,
         setNewName,
         handleNameChange,
+        leaderBoard,
+        setLeaderBoard,
       }}
     >
       {children}

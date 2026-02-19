@@ -19,6 +19,7 @@ import Call from './app/(tabs)/call';
 import { Login } from './app/(tabs)/login';
 import ARScreen from './app/(tabs)/ar';
 import { RootStackParamList } from './app/types';
+import { Leaderboard } from './app/(tabs)/leaderboard';
 
 const Stack = createNativeStackNavigator<RootStackParamList>();
 
@@ -39,30 +40,12 @@ function App() {
             <Stack.Screen name="Call" component={Call} />
             <Stack.Screen name="Login" component={Login} />
             <Stack.Screen name="AR" component={ARScreen} />
+            <Stack.Screen name="LeaderBoard" component={Leaderboard} />
           </Stack.Navigator>
         </NavigationContainer>
       </GameProvider>
     </SafeAreaProvider>
   );
 }
-
-function AppContent() {
-  const safeAreaInsets = useSafeAreaInsets();
-
-  return (
-    <View style={styles.container}>
-      <NewAppScreen
-        templateFileName="App.tsx"
-        safeAreaInsets={safeAreaInsets}
-      />
-    </View>
-  );
-}
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-  },
-});
 
 export default App;

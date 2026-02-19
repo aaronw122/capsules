@@ -41,7 +41,7 @@ export const Login = ({ navigation }: { navigation: NavigationProp<any> }) => {
       </View>
       <TouchableOpacity
         style={[styles.button, !newName.trim() && styles.buttonDisabled]}
-        onPress={() => newName.trim() && navigation.navigate('AR')}
+        onPress={() => newName.trim() && joinLobby()}
         activeOpacity={0.8}
         disabled={!newName.trim()}
       >
