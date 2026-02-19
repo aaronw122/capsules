@@ -64,6 +64,21 @@ class ARWorldMapModule: RCTEventEmitter {
         }
     }
 
+    @objc func startSessionFromBundle(_ filename: String) {
+        DispatchQueue.main.async { [weak self] in
+            guard let self = self, let view = self.arView else { return }
+
+            guard let url = Bundle.main.url(forResource: filename, withExtension: nil),
+                  let data = try? Data(contentsOf: url) else {
+                print("[ARWorldMapModule] No bundled world map '\(filename)' found, starting without map")
+                view.startSession()
+                return
+            }
+            print("[ARWorldMapModule] Loading bundled world map: \(filename)")
+            view.loadWorldMap(data: data)
+        }
+    }
+
     @objc func placeCapsules(_ capsules: NSArray) {
         DispatchQueue.main.async { [weak self] in
             guard let self = self, let view = self.arView else { return }

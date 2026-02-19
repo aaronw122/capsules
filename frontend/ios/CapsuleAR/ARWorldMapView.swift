@@ -56,10 +56,14 @@ class ARWorldMapView: ARSCNView, ARSCNViewDelegate, ARSessionDelegate {
                 return
             }
 
+            print("[ARWorldMapView] World map loaded with \(worldMap.anchors.count) anchor(s)")
+
             let config = ARWorldTrackingConfiguration()
             config.planeDetection = [.horizontal, .vertical]
             config.initialWorldMap = worldMap
 
+            // .removeExistingAnchors clears anchors from the current session, then
+            // ARKit loads the world map's anchors fresh — triggering didAdd for each.
             self.session.run(config, options: [.resetTracking, .removeExistingAnchors])
             isRelocalized = false
         } catch {
@@ -130,8 +134,10 @@ class ARWorldMapView: ARSCNView, ARSCNViewDelegate, ARSessionDelegate {
     // ARSCNViewDelegate
 
     func renderer(_ renderer: any SCNSceneRenderer, didAdd node: SCNNode, for anchor: ARAnchor) {
+        print("[ARWorldMapView] didAdd anchor: type=\(type(of: anchor)) name=\(anchor.name ?? "nil")")
         guard let name = anchor.name, !name.isEmpty else { return }
 
+        print("[ARWorldMapView] Rendering capsule sphere for: \(name)")
         let color = capsuleColors[name] ?? .systemYellow
 
         // CONFIGURABLE: Sphere radius in meters. 0.05 = 5cm diameter.
@@ -159,10 +165,10 @@ class ARWorldMapView: ARSCNView, ARSCNViewDelegate, ARSessionDelegate {
     // ARSessionDelegate
 
     func session(_ session: ARSession, didUpdate frame: ARFrame) {
-        let status = frame.worldMappingStatus
+        let mappingStatus = frame.worldMappingStatus
 
         let statusStr: String
-        switch status {
+        switch mappingStatus {
         case .mapped: statusStr = "mapped"
         case .extending: statusStr = "extending"
         case .limited: statusStr = "limited"
@@ -175,10 +181,26 @@ class ARWorldMapView: ARSCNView, ARSCNViewDelegate, ARSessionDelegate {
             lastTrackingStatus = statusStr
             onTrackingStateChanged?(statusStr)
         }
+    }
 
-        if status == .mapped && !isRelocalized {
-            isRelocalized = true
-            onRelocalized?()
+    // Relocalization is detected via camera tracking state, not world mapping status.
+    // When a world map is loaded, ARKit enters .limited/.relocalizing while it tries
+    // to match features. Once it succeeds, tracking transitions to .normal — that's
+    // when the coordinate system is aligned to the captured space.
+    func session(_ session: ARSession, cameraDidChangeTrackingState camera: ARCamera) {
+        switch camera.trackingState {
+        case .normal:
+            if !isRelocalized {
+                isRelocalized = true
+                print("[ARWorldMapView] Relocalized — coordinate system aligned")
+                onRelocalized?()
+            }
+        case .limited(let reason):
+            if reason == .relocalizing {
+                print("[ARWorldMapView] Relocalizing — point at the captured area")
+            }
+        default:
+            break
         }
     }
 
