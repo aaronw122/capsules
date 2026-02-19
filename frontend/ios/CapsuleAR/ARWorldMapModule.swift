@@ -28,12 +28,13 @@ class ARWorldMapModule: RCTEventEmitter {
     }
 
     override func supportedEvents() -> [String]! {
-        return ["onCapsuleTapped", "onRelocalized", "onTrackingStateChanged"]
+        return ["onCapsuleTapped", "onRelocalized", "onTrackingStateChanged", "onViewReady"]
     }
 
     // Called by ARWorldMapViewManager to link the view
     func setARView(_ view: ARWorldMapView) {
         self.arView = view
+        print("[ARWorldMapModule] AR view linked")
 
         view.onCapsuleTapped = { [weak self] capsuleId in
             self?.sendEvent(withName: "onCapsuleTapped", body: ["capsuleId": capsuleId])
@@ -46,11 +47,17 @@ class ARWorldMapModule: RCTEventEmitter {
         view.onTrackingStateChanged = { [weak self] status in
             self?.sendEvent(withName: "onTrackingStateChanged", body: ["status": status])
         }
+
+        // Notify JS that the native view is ready to receive commands
+        self.sendEvent(withName: "onViewReady", body: nil)
     }
 
     @objc func startSession(_ worldMapBase64: String) {
         DispatchQueue.main.async { [weak self] in
-            guard let self = self, let view = self.arView else { return }
+            guard let self = self, let view = self.arView else {
+                print("[ARWorldMapModule] startSession failed — arView is nil")
+                return
+            }
 
             if worldMapBase64.isEmpty {
                 view.startSession()
@@ -66,7 +73,10 @@ class ARWorldMapModule: RCTEventEmitter {
 
     @objc func startSessionFromBundle(_ filename: String) {
         DispatchQueue.main.async { [weak self] in
-            guard let self = self, let view = self.arView else { return }
+            guard let self = self, let view = self.arView else {
+                print("[ARWorldMapModule] startSessionFromBundle failed — arView is nil")
+                return
+            }
 
             guard let url = Bundle.main.url(forResource: filename, withExtension: nil),
                   let data = try? Data(contentsOf: url) else {
@@ -81,8 +91,14 @@ class ARWorldMapModule: RCTEventEmitter {
 
     @objc func placeCapsules(_ capsules: NSArray) {
         DispatchQueue.main.async { [weak self] in
-            guard let self = self, let view = self.arView else { return }
-            guard let capsuleArray = capsules as? [[String: Any]] else { return }
+            guard let self = self, let view = self.arView else {
+                print("[ARWorldMapModule] placeCapsules failed — arView is nil")
+                return
+            }
+            guard let capsuleArray = capsules as? [[String: Any]] else {
+                print("[ARWorldMapModule] placeCapsules failed — invalid capsule array format")
+                return
+            }
             view.placeCapsules(capsules: capsuleArray)
         }
     }
