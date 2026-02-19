@@ -17,7 +17,7 @@
 		A2B8AC5D2F4679C700842B19 /* ARWorldMapModule.m in Sources */ = {isa = PBXBuildFile; fileRef = A2B8AC542F4679C700842B19 /* ARWorldMapModule.m */; };
 		A2B8AC5E2F4679C700842B19 /* ARWorldMapViewManager.m in Sources */ = {isa = PBXBuildFile; fileRef = A2B8AC572F4679C700842B19 /* ARWorldMapViewManager.m */; };
 		A2B8AC5F2F4679C700842B19 /* ARWorldMapView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2B8AC562F4679C700842B19 /* ARWorldMapView.swift */; };
-		A2B8AC692F46967100842B19 /* arworldmap.data in Resources */ = {isa = PBXBuildFile; fileRef = A2B8AC682F46967100842B19 /* arworldmap.data */; };
+		A2B8AC6F2F47C75D00842B19 /* arworldmap.data in Resources */ = {isa = PBXBuildFile; fileRef = A2B8AC6E2F47C75D00842B19 /* arworldmap.data */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -36,7 +36,7 @@
 		A2B8AC572F4679C700842B19 /* ARWorldMapViewManager.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ARWorldMapViewManager.m; sourceTree = "<group>"; };
 		A2B8AC582F4679C700842B19 /* ARWorldMapViewManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ARWorldMapViewManager.swift; sourceTree = "<group>"; };
 		A2B8AC592F4679C700842B19 /* CapsuleAR-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "CapsuleAR-Bridging-Header.h"; sourceTree = "<group>"; };
-		A2B8AC682F46967100842B19 /* arworldmap.data */ = {isa = PBXFileReference; lastKnownFileType = file.bplist; path = arworldmap.data; sourceTree = "<group>"; };
+		A2B8AC6E2F47C75D00842B19 /* arworldmap.data */ = {isa = PBXFileReference; lastKnownFileType = file.bplist; path = arworldmap.data; sourceTree = "<group>"; };
 		ED297162215061F000B7C4FE /* JavaScriptCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = JavaScriptCore.framework; path = System/Library/Frameworks/JavaScriptCore.framework; sourceTree = SDKROOT; };
 /* End PBXFileReference section */
 
@@ -55,7 +55,7 @@
 		13B07FAE1A68108700A75B9A /* frontend */ = {
 			isa = PBXGroup;
 			children = (
-				A2B8AC682F46967100842B19 /* arworldmap.data */,
+				A2B8AC6E2F47C75D00842B19 /* arworldmap.data */,
 				A2B8AC5A2F4679C700842B19 /* CapsuleAR */,
 				13B07FB51A68108700A75B9A /* Images.xcassets */,
 				761780EC2CA45674006654EE /* AppDelegate.swift */,
@@ -186,7 +186,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				A2B8AC692F46967100842B19 /* arworldmap.data in Resources */,
+				A2B8AC6F2F47C75D00842B19 /* arworldmap.data in Resources */,
 				81AB9BB82411601600AC10FF /* LaunchScreen.storyboard in Resources */,
 				13B07FBF1A68108700A75B9A /* Images.xcassets in Resources */,
 				9D0EEFA08D56AEDA97B4F035 /* PrivacyInfo.xcprivacy in Resources */,
@@ -220,9 +220,13 @@
 			inputFileListPaths = (
 				"${PODS_ROOT}/Target Support Files/Pods-frontend/Pods-frontend-frameworks-${CONFIGURATION}-input-files.xcfilelist",
 			);
+			inputPaths = (
+			);
 			name = "[CP] Embed Pods Frameworks";
 			outputFileListPaths = (
 				"${PODS_ROOT}/Target Support Files/Pods-frontend/Pods-frontend-frameworks-${CONFIGURATION}-output-files.xcfilelist",
+			);
+			outputPaths = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
@@ -259,9 +263,13 @@
 			inputFileListPaths = (
 				"${PODS_ROOT}/Target Support Files/Pods-frontend/Pods-frontend-resources-${CONFIGURATION}-input-files.xcfilelist",
 			);
+			inputPaths = (
+			);
 			name = "[CP] Copy Pods Resources";
 			outputFileListPaths = (
 				"${PODS_ROOT}/Target Support Files/Pods-frontend/Pods-frontend-resources-${CONFIGURATION}-output-files.xcfilelist",
+			);
+			outputPaths = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
