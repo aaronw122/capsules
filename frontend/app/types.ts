@@ -2,11 +2,20 @@ export type PlayerState = {
   id: string;
   name: string;
   capsules: number;
-  completedAt: string;
-  place: number;
+  completedAt: string | null;
+  rank: number;
 };
 
-export type LeaderBoard = PlayerState[];
+export type PlayerLeaderBoard = {
+  name: string;
+  capsules: number;
+  completedAt: string | null;
+  rank: number;
+};
+
+export type GameState = 'lobby' | 'playing' | 'gameOver';
+
+export type LeaderBoard = PlayerState[] | [];
 
 export type GameContext = {
   playerState: PlayerState | null;
@@ -24,6 +33,7 @@ export type RootStackParamList = {
   Call: undefined;
   Login: undefined;
   AR: undefined;
+  LeaderBoard: undefined;
 };
 
 export type Capsule = {
