@@ -26,11 +26,15 @@ app.post('/add/player', (req, res) => {
     name: body.name,
     capsules: 0,
     completedAt: null,
+    place: leaderboard.length + 1,
   };
 
   leaderboard.push(newPlayer); // add player object in request body to leaderboard array
 
   // COMMENT: WHEN WEBSOCKETS ARE MADE, BROADCAST NEW STATE OF LEADERBOARD EVERYTIME LEADERBOARD GETS UPDATED
+  console.log('player', newPlayer);
+
+  console.log('leaderboard', leaderboard);
 
   res.json(newPlayer);
 });
@@ -38,7 +42,7 @@ app.post('/add/player', (req, res) => {
 const PORT = 3000;
 app.listen(PORT, (err) => {
   if (err) {
-    console.log('Error on server setup');
+    console.log('Error on server setup', err);
   } else {
     console.log(`Listening on port ${PORT}`);
   }
