@@ -9,16 +9,7 @@ export const Login = ({ navigation }: { navigation: NavigationProp<any> }) => {
 
   if (!game) throw new Error('useGame not working');
 
-  const { newName, handleNameChange, setPlayerState, createPlayer } = game;
-
-  const openAR = async () => {
-    const player = await createPlayer();
-    setPlayerState(player);
-    console.log('player', player);
-
-    // navigates to ar.tsx
-    navigation.navigate('AR');
-  };
+  const { newName, handleNameChange } = game;
 
   return (
     <View>
@@ -27,7 +18,7 @@ export const Login = ({ navigation }: { navigation: NavigationProp<any> }) => {
         value={newName}
         style={styles.input}
       />
-      <Button onPress={() => openAR()} title="join game" />
+      <Button onPress={() => navigation.navigate('AR')} title="join game" />
     </View>
   );
 };

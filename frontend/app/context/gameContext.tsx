@@ -40,6 +40,7 @@ export function GameProvider({ children }: { children: React.ReactNode }) {
     }
   */
 
+  //fire this once gameState changes to 'playing'
   const createPlayer = async (): Promise<PlayerState> => {
     const playerObj = {
       name: newName,
