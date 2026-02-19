@@ -24,6 +24,9 @@ export default {
   startSession: (worldMapBase64: string) =>
     ARWorldMapModule.startSession(worldMapBase64),
 
+  startSessionFromBundle: (filename: string) =>
+    ARWorldMapModule.startSessionFromBundle(filename),
+
   placeCapsules: (
     capsules: { id: string; position: number[]; color: string }[],
   ) => ARWorldMapModule.placeCapsules(capsules),

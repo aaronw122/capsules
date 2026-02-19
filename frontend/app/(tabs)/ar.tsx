@@ -1,41 +1,26 @@
 // ar.tsx
-// AR integration test screen. Proves the full Swift → bridge → JS chain works:
-//   1. Renders <ARWorldMapView /> (live AR camera from Swift)
-//   2. Places 3 test capsules at hardcoded positions via ARWorldMapModule
-//   3. Listens for onCapsuleTapped — shows JS Alert with the capsule ID
-//   4. Shows tracking/relocalization status as a text overlay
+// AR screen — loads a world map from the app bundle. Capsule anchors are
+// embedded inside the ARWorldMap itself (saved during capture), so ARKit
+// restores them automatically at the correct positions during relocalization.
+// No need to call placeCapsules() — the renderer fires for each restored anchor.
 //
-// This is a throwaway test screen — Aaron replaces it with the real game UI.
-// Once this works, the architecture is proven: tapping a sphere in AR fires
-// an event that crosses the native bridge and arrives in JavaScript.
-//
-// To test with a real world map: replace '' in startSession() with a base64-
-// encoded arworldmap.data from the capture tool, and use real positions from
-// frontend/data/positions.json instead of TEST_CAPSULES.
+// Flow: startSessionFromBundle('arworldmap.data') → ARKit relocalizes →
+//       anchors restored → renderer renders spheres → tap fires JS event
 
 import React, { useEffect, useState } from 'react';
 import { View, Text, Alert, StyleSheet } from 'react-native';
 import { ARWorldMapView } from '../native/ARWorldMapView';
 import ARWorldMapModule from '../native/ARWorldMapModule';
 
-// Hardcoded test data — positions in meters relative to AR session origin.
-// Replace with loadCapsules().forSwift from capsuleLoader.ts for real data.
-const TEST_CAPSULES = [
-  { id: 'test-1', position: [0.5, 0.0, -1.0], color: '#FFD700' },
-  { id: 'test-2', position: [-0.5, 0.0, -2.0], color: '#FF6B6B' },
-  { id: 'test-3', position: [0.0, 0.5, -1.5], color: '#4ECDC4' },
-];
-
 export default function ARScreen() {
   const [trackingStatus, setTrackingStatus] = useState('initializing');
   const [relocalized, setRelocalized] = useState(false);
 
   useEffect(() => {
-    // Start session with empty string = no world map, just raw AR
-    ARWorldMapModule.startSession('');
-
-    // Place test capsules at hardcoded positions
-    ARWorldMapModule.placeCapsules(TEST_CAPSULES);
+    // Load world map from app bundle — anchors are inside the map and will
+    // be restored by ARKit during relocalization. Falls back to plain AR
+    // if no world map is bundled.
+    ARWorldMapModule.startSessionFromBundle('arworldmap.data');
 
     const tapSub = ARWorldMapModule.onCapsuleTapped(e => {
       Alert.alert('Capsule Tapped', `ID: ${e.capsuleId}`);
