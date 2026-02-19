@@ -38,4 +38,6 @@ export default {
 
   onTrackingStateChanged: (cb: (e: { status: string }) => void) =>
     emitter.addListener('onTrackingStateChanged', cb),
+
+  onViewReady: (cb: () => void) => emitter.addListener('onViewReady', cb),
 };

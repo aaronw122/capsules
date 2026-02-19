@@ -1,5 +1,0 @@
-[
-  { "id": "test-1", "name": "Alice Smith", "funFact": "Placeholder", "keyFragment": "THE", "sequence": 1, "color": "#FFD700" },
-  { "id": "test-2", "name": "Bob Jones", "funFact": "Placeholder", "keyFragment": "BEST", "sequence": 2, "color": "#FF6B6B" },
-  { "id": "test-3", "name": "Charlie Lee", "funFact": "Placeholder", "keyFragment": "COHORT", "sequence": 3, "color": "#4ECDC4" }
-]

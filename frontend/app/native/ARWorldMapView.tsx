@@ -9,6 +9,7 @@
 // The native view is defined in frontend/ios/CapsuleAR/ARWorldMapView.swift
 // and exposed to RN by frontend/ios/CapsuleAR/ARWorldMapViewManager.swift
 
-import { requireNativeComponent } from 'react-native';
+import { requireNativeComponent, type ViewProps } from 'react-native';
 
-export const ARWorldMapView = requireNativeComponent('ARWorldMapView');
+export const ARWorldMapView =
+  requireNativeComponent<ViewProps>('ARWorldMapView');
