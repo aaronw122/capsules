@@ -25,3 +25,14 @@ export type RootStackParamList = {
   Login: undefined;
   AR: undefined;
 };
+
+export type Capsule = {
+  id: string;
+  letter: string;
+  number: number;
+  isOpened: boolean;
+  content: {
+    name: string;
+    funFact: string;
+  };
+};
