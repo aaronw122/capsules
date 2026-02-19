@@ -97,6 +97,7 @@ app.post('/add/player', (req, res) => {
     rank: leaderboard.size + 1,
     capsuleTimestamp: null,
     completedAt: null,
+    place: leaderboard.length + 1,
   };
 
   leaderboard.set(newPlayer.id, newPlayer); // add player object in request body to leaderboard array
