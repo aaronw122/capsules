@@ -4,7 +4,7 @@ export interface Player {
   capsules: number; // number of capsules player opened
   rank: number; // player leaderboard rank
   capsuleTimestamp: number | null; // timestamp of most recent capsule opened
-  completedAt: number | null; // number if they finished with a timestamp or null if they didn't finish
+  completedAt: string | null; // formatted "M:SS" time remaining when they finished, or null if they didn't finish
 }
 
 export interface Capsule {
