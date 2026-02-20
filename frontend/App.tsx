@@ -12,6 +12,7 @@ import {
   useSafeAreaInsets,
 } from 'react-native-safe-area-context';
 import { GameProvider } from './app/context/gameContext';
+import { ARProvider } from './app/context/arContext';
 import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import Onboarding from './app/Sheets/index';
@@ -34,15 +35,17 @@ function App() {
   return (
     <SafeAreaProvider>
       <GameProvider>
-        <NavigationContainer>
-          <Stack.Navigator>
-            <Stack.Screen name="Onboarding" component={Onboarding} />
-            <Stack.Screen name="Call" component={Call} />
-            <Stack.Screen name="Login" component={Login} />
-            <Stack.Screen name="AR" component={ARScreen} />
-            <Stack.Screen name="LeaderBoard" component={Leaderboard} />
-          </Stack.Navigator>
-        </NavigationContainer>
+        <ARProvider>
+          <NavigationContainer>
+            <Stack.Navigator>
+              <Stack.Screen name="Onboarding" component={Onboarding} />
+              <Stack.Screen name="Call" component={Call} />
+              <Stack.Screen name="Login" component={Login} />
+              <Stack.Screen name="AR" component={ARScreen} />
+              <Stack.Screen name="LeaderBoard" component={Leaderboard} />
+            </Stack.Navigator>
+          </NavigationContainer>
+        </ARProvider>
       </GameProvider>
     </SafeAreaProvider>
   );
