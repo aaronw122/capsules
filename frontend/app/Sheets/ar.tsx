@@ -30,12 +30,12 @@ export default function ARScreen({
   if (!game) throw new Error('useGame didnt work');
   if (!ar) throw new Error('useAR didnt work');
 
-const {
-  capsules,
-  selectedCapsule,
-  setSelectedCapsule,
-  openCapsule,
-  gameState,
+  const {
+    capsules,
+    selectedCapsule,
+    setSelectedCapsule,
+    openCapsule,
+    gameState,
   } = game;
   const { localizeWorld, trackingStatus, relocalized } = ar;
 
@@ -44,6 +44,13 @@ const {
     const cleanup = localizeWorld();
     return cleanup;
   }, []);
+
+  // Listen for game state to change to gameOver then display final leaderboard
+  useEffect(() => {
+    if (gameState === 'gameOver') {
+      navigation.navigate('Leaderboard');
+    }
+  }, [gameState]);
 
   // Place capsules in AR once relocalized and data is available
   useEffect(() => {
