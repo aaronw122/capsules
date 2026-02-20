@@ -10,7 +10,7 @@ export const Phrase = () => {
   return (
     <View>
       {escapePhrase.map(el => (
-        <NeonLetterBox letter={el} />
+        <NeonLetterBox key={el.id} letter={el} />
       ))}
     </View>
   );

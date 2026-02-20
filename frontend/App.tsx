@@ -21,6 +21,10 @@ import { Login } from './app/Sheets/login';
 import ARScreen from './app/Sheets/ar';
 import { RootStackParamList } from './app/types';
 import { Leaderboard } from './app/Sheets/leaderboard';
+<<<<<<< HEAD
+=======
+import { ARProvider } from './app/context/arContext';
+>>>>>>> 752a813 ( fixes for hud)
 
 const Stack = createNativeStackNavigator<RootStackParamList>();
 

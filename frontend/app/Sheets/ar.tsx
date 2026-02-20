@@ -22,6 +22,11 @@ export default function ARScreen({
   navigation: NavigationProp<any>;
 }) {
   const game = useGame();
+<<<<<<< HEAD
+=======
+  console.log('game', game);
+
+>>>>>>> 752a813 ( fixes for hud)
   const ar = useAR();
 
   if (!game) throw new Error('useGame didnt work');
