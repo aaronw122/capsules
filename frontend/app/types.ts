@@ -26,6 +26,8 @@ export type GameContext = {
   createPlayer: () => Promise<PlayerState>;
   leaderBoard: LeaderBoard | [];
   setLeaderBoard: React.Dispatch<React.SetStateAction<[] | PlayerState[]>>;
+  capsules: Capsule[] | null;
+  setCapsules: React.Dispatch<React.SetStateAction<null | Capsule[]>>;
 };
 
 export type RootStackParamList = {
