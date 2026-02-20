@@ -1,9 +1,10 @@
 import { Phrase } from './escapePhrase';
+import { Timer } from './timer';
 import { View } from 'react-native';
 
 const Hud = () => {
-  //gameContext timer
   <View>
     <Phrase />
+    <Timer />
   </View>;
 };
