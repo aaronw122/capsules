@@ -37,11 +37,25 @@ export default function ARScreen({
 
   const { localizeWorld, trackingStatus } = ar;
   // Fetch capsules from backend on mount
-  // capsules is in useContext, accesible across all components, cleaner than leaving here.
+  // capsules is in useContext, accesible across axll components, cleaner than leaving here.
   useEffect(() => {
     const cleanup = localizeWorld();
     return cleanup;
   }, []);
+
+  // Place capsules in AR once relocalized and data is available
+  useEffect(() => {
+    if (relocalized && capsules) {
+      console.log('[ar.tsx] Placing', capsules.length, 'capsules in AR');
+      ARWorldMapModule.placeCapsules(
+        capsules.map(c => ({
+          id: c.id,
+          position: c.position,
+          color: '#FFD700',
+        })),
+      );
+    }
+  }, [relocalized, capsules]);
 
   // sets up a listener so when capsule is tapped, sets selected capsule, and then can be opened
   useEffect(() => {
