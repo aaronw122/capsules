@@ -39,6 +39,7 @@ export type GameContext = {
   endTime: number;
   setEndTime: React.Dispatch<React.SetStateAction<number>>;
   openCapsule: (capsule: Capsule) => void;
+  webSocketConnection: () => void;
 };
 
 export type RootStackParamList = {

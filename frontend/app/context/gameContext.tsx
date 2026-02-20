@@ -78,20 +78,47 @@ export function GameProvider({ children }: { children: React.ReactNode }) {
       const response = await fetch(`${Config.BASE_URL}/capsules`);
       const data: Capsule[] = await response.json();
       setCapsules(data);
-      console.log(`[ar.tsx] Fetched ${data.length} capsules from backend`);
     } catch (err) {
       console.error('[ar.tsx] Failed to fetch capsules:', err);
     }
+  };
+
+  const webSocketConnection = () => {
+    // create websocket connection
+    websocket.current = io(baseURL);
+
+    websocket.current.on('connect', () => {
+      console.log('[gameContext] Socket connected, id:', websocket.current?.id);
+    });
+
+    websocket.current.on('connect_error', err => {
+      console.error('[gameContext] Socket connection error:', err.message);
+    });
+
+    // listens for server emit of game start after curl request
+    websocket.current.on('gameStart', (data: number) => {
+      setGameState('playing');
+      setEndTime(data); // data = endsAt value
+    });
+
+    // listens for server emit leaderboard update
+    websocket.current.on('leaderboardUpdate', (data: PlayerState[]) => {
+      setLeaderBoard(data);
+    });
+
+    // listens for server emit game over state
+    websocket.current.on('gameOver', () => {
+      setGameState('gameOver');
+    });
   };
 
   //openCapsule function
   const openCapsule = (capsule: Capsule) => {
     capsule.isOpened = true;
     setSelectedCapsule(capsule);
-
     // updating player's progress on escape phrase
-    const updatedEscapePhrase = [...escapePhrase]; // make copy of escape phrase array
-    updatedEscapePhrase[capsule.number] = capsule.letter; // update letter they found in capsule
+    const updatedEscapePhrase = [...escapePhrase];
+    updatedEscapePhrase[capsule.number] = capsule.letter;
     setEscapePhrase(updatedEscapePhrase);
 
     // emit event to update player state and leaderboard
@@ -107,32 +134,6 @@ export function GameProvider({ children }: { children: React.ReactNode }) {
     const playerObj = {
       name: newName,
     };
-
-    console.log('baseUrl', baseURL);
-
-    // create websocket connection
-    websocket.current = io(baseURL);
-
-    // listens for server emit of game start after curl request
-    websocket.current.on('gameStart', (data: number) => {
-      console.log('Game Started');
-
-      setGameState('playing');
-      setEndTime(data); // data = endsAt value
-    });
-
-    // listens for server emit leaderboard update
-    websocket.current.on('leaderboardUpdate', (data: PlayerState[]) => {
-      setLeaderBoard(data);
-
-      console.log('leaderboard updated');
-    });
-
-    // listens for server emit game over state
-    websocket.current.on('gameOver', () => {
-      console.log('Game OVer');
-      setGameState('gameOver');
-    });
 
     const response = await fetch(`${baseURL}/add/player`, {
       method: 'POST',
@@ -173,6 +174,7 @@ export function GameProvider({ children }: { children: React.ReactNode }) {
         endTime,
         setEndTime,
         openCapsule,
+        webSocketConnection,
       }}
     >
       {children}
