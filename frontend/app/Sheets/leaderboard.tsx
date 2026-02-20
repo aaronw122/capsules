@@ -35,6 +35,7 @@ export const Leaderboard = () => {
       name={item.name}
       capsules={item.capsules}
       completedAt={item.completedAt}
+      capsuleTimestamp={item.capsuleTimestamp}
     />
   );
 

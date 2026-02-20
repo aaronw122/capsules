@@ -19,7 +19,7 @@ import Call from './app/Sheets/call';
 import { Login } from './app/Sheets/login';
 import ARScreen from './app/Sheets/ar';
 import { RootStackParamList } from './app/types';
-import { Leaderboard } from './app/(tabs)/leaderboard';
+import { Leaderboard } from './app/Sheets/leaderboard';
 
 const Stack = createNativeStackNavigator<RootStackParamList>();
 
