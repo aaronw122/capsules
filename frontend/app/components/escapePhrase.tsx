@@ -9,8 +9,8 @@ export const Phrase = () => {
   const { escapePhrase } = game;
   return (
     <View>
-      {escapePhrase.map(el => (
-        <NeonLetterBox key={el.id} letter={el} />
+      {escapePhrase.map((el, index) => (
+        <NeonLetterBox key={index} letter={el} />
       ))}
     </View>
   );
