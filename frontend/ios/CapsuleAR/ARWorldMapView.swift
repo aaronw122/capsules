@@ -21,6 +21,18 @@ class ARWorldMapView: ARSCNView, ARSCNViewDelegate, ARSessionDelegate {
 
     private var isRelocalized = false
     private var lastTrackingStatus: String = ""
+    private var capsulesEnabled = false
+    private var pendingAnchors: [(SCNNode, ARAnchor)] = []
+    private var openedCapsuleIDs: Set<String> = []
+
+    private lazy var capsuleModelTemplate: SCNNode? = {
+        guard let url = Bundle.main.url(forResource: "toy_drummer", withExtension: "usdz"),
+              let scene = try? SCNScene(url: url, options: nil) else {
+            print("[ARWorldMapView] Failed to load toy_drummer.usdz")
+            return nil
+        }
+        return scene.rootNode
+    }()
     var onCapsuleTapped: ((_ capsuleId: String) -> Void)?
     var onRelocalized: (() -> Void)?
     var onTrackingStateChanged: ((_ status: String) -> Void)?
@@ -79,6 +91,13 @@ class ARWorldMapView: ARSCNView, ARSCNViewDelegate, ARSessionDelegate {
     // and looked up by anchor name in renderer(_:didAdd:for:).
 
     func placeCapsules(capsules: [[String: Any]]) {
+        capsulesEnabled = true
+        // Render any anchors that arrived before capsules were enabled
+        for (node, anchor) in pendingAnchors {
+            renderCapsule(on: node, for: anchor)
+        }
+        pendingAnchors.removeAll()
+
         let existingNames = Set(self.session.currentFrame?.anchors.compactMap { $0.name } ?? [])
         for capsule in capsules {
             guard let id = capsule["id"] as? String,
@@ -87,6 +106,10 @@ class ARWorldMapView: ARSCNView, ARSCNViewDelegate, ARSessionDelegate {
             guard !existingNames.contains(id) else {
                 print("[ARWorldMapView] Anchor already exists, skipping: \(id)")
                 continue
+            }
+
+            if let isOpened = capsule["isOpened"] as? Bool, isOpened {
+                openedCapsuleIDs.insert(id)
             }
 
             // CONFIGURABLE: Fallback color if capsule has no color defined in capsuleContent.json.
@@ -125,10 +148,10 @@ class ARWorldMapView: ARSCNView, ARSCNViewDelegate, ARSessionDelegate {
         ])
 
         for result in hitResults {
-            // Walk up the node hierarchy to find one with a capsule name
+            // Walk up the node hierarchy to find one with a known capsule ID
             var node: SCNNode? = result.node
             while let current = node {
-                if let name = current.name, !name.isEmpty {
+                if let name = current.name, renderedAnchorIDs.contains(name) {
                     onCapsuleTapped?(name)
                     return
                 }
@@ -142,35 +165,92 @@ class ARWorldMapView: ARSCNView, ARSCNViewDelegate, ARSessionDelegate {
     func renderer(_ renderer: any SCNSceneRenderer, didAdd node: SCNNode, for anchor: ARAnchor) {
         print("[ARWorldMapView] didAdd anchor: type=\(type(of: anchor)) name=\(anchor.name ?? "nil")")
         guard let name = anchor.name, !name.isEmpty else { return }
+
+        if !capsulesEnabled {
+            print("[ARWorldMapView] Capsules not enabled yet, queuing: \(name)")
+            pendingAnchors.append((node, anchor))
+            return
+        }
+
+        renderCapsule(on: node, for: anchor)
+    }
+
+    private func renderCapsule(on node: SCNNode, for anchor: ARAnchor) {
+        guard let name = anchor.name, !name.isEmpty else { return }
         guard !renderedAnchorIDs.contains(name) else {
             print("[ARWorldMapView] Skipping duplicate anchor: \(name)")
             return
         }
         renderedAnchorIDs.insert(name)
 
-        print("[ARWorldMapView] Rendering capsule sphere for: \(name)")
+        let isOpened = openedCapsuleIDs.contains(name)
+
+        if isOpened {
+            print("[ARWorldMapView] Rendering opened capsule (sphere) for: \(name)")
+            addSphereNode(to: node, name: name)
+        } else {
+            print("[ARWorldMapView] Rendering unopened capsule (USDZ) for: \(name)")
+            addUSDZNode(to: node, name: name)
+        }
+    }
+
+    private func addSphereNode(to node: SCNNode, name: String) {
         let color = capsuleColors[name] ?? .systemYellow
 
-        // CONFIGURABLE: Sphere radius in meters. 0.05 = 5cm diameter.
-        // Should match the capture tool's sphere size so what you see during
-        // capture is what players see. Increase for easier tapping on device.
         let sphere = SCNSphere(radius: 0.05)
         sphere.firstMaterial?.diffuse.contents = color
-        // CONFIGURABLE: Lighting model. .physicallyBased gives realistic shading.
-        // Use .constant for flat color (no shading), .blinn for simpler lighting.
         sphere.firstMaterial?.lightingModel = .physicallyBased
 
         let sphereNode = SCNNode(geometry: sphere)
         sphereNode.name = name
         node.addChildNode(sphereNode)
 
-        // CONFIGURABLE: Hover animation — height (meters) and duration (seconds).
-        // 0.02m up/down over 1s = gentle floating effect. Set to 0 to disable.
         let hover = SCNAction.sequence([
             SCNAction.moveBy(x: 0, y: 0.02, z: 0, duration: 1.0),
             SCNAction.moveBy(x: 0, y: -0.02, z: 0, duration: 1.0)
         ])
         sphereNode.runAction(SCNAction.repeatForever(hover))
+    }
+
+    private func addUSDZNode(to node: SCNNode, name: String) {
+        guard let template = capsuleModelTemplate else {
+            print("[ARWorldMapView] USDZ template unavailable, falling back to sphere for: \(name)")
+            addSphereNode(to: node, name: name)
+            return
+        }
+
+        let modelNode = template.clone()
+        modelNode.name = name
+        // CONFIGURABLE: Scale to ~10-15cm. Adjust if the model looks too big/small.
+        modelNode.scale = SCNVector3(0.03, 0.03, 0.03)
+        node.addChildNode(modelNode)
+
+        let hover = SCNAction.sequence([
+            SCNAction.moveBy(x: 0, y: 0.02, z: 0, duration: 1.0),
+            SCNAction.moveBy(x: 0, y: -0.02, z: 0, duration: 1.0)
+        ])
+        modelNode.runAction(SCNAction.repeatForever(hover))
+    }
+
+    func markCapsuleOpened(_ capsuleId: String) {
+        openedCapsuleIDs.insert(capsuleId)
+
+        // Find the node for this capsule and swap USDZ → sphere
+        guard let frame = self.session.currentFrame else { return }
+        for anchor in frame.anchors {
+            guard anchor.name == capsuleId else { continue }
+            // Walk scene graph to find the anchor's node
+            self.scene.rootNode.enumerateChildNodes { node, stop in
+                // Anchor nodes contain a child named with the capsuleId
+                if node.name == capsuleId {
+                    guard let parentNode = node.parent else { return }
+                    node.removeFromParentNode()
+                    self.addSphereNode(to: parentNode, name: capsuleId)
+                    stop.pointee = true
+                }
+            }
+            break
+        }
     }
 
     // ARSessionDelegate

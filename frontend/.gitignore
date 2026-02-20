@@ -26,6 +26,9 @@ DerivedData
 **/.xcode.env.local
 ios/Podfile.lock
 
+ios/Podfile.lock
+*.usdz
+
 # Android/IntelliJ
 #
 build/

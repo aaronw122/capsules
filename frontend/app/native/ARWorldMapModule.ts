@@ -28,8 +28,16 @@ export default {
     ARWorldMapModule.startSessionFromBundle(filename),
 
   placeCapsules: (
-    capsules: { id: string; position: number[]; color: string }[],
+    capsules: {
+      id: string;
+      position: number[];
+      color: string;
+      isOpened: boolean;
+    }[],
   ) => ARWorldMapModule.placeCapsules(capsules),
+
+  markCapsuleOpened: (capsuleId: string) =>
+    ARWorldMapModule.markCapsuleOpened(capsuleId),
 
   onCapsuleTapped: (cb: (e: { capsuleId: string }) => void) =>
     emitter.addListener('onCapsuleTapped', cb),

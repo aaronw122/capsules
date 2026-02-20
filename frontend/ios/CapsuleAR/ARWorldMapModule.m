@@ -11,4 +11,5 @@
 RCT_EXTERN_METHOD(startSession:(NSString *)worldMapBase64)
 RCT_EXTERN_METHOD(startSessionFromBundle:(NSString *)filename)
 RCT_EXTERN_METHOD(placeCapsules:(NSArray *)capsules)
+RCT_EXTERN_METHOD(markCapsuleOpened:(NSString *)capsuleId)
 @end

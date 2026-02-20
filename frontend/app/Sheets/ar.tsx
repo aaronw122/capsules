@@ -54,17 +54,18 @@ export default function ARScreen({
 
   // Place capsules in AR once relocalized and data is available
   useEffect(() => {
-    if (relocalized && capsules.size > 0) {
+    if (relocalized && capsules.size > 0 && gameState === 'playing') {
       console.log('[ar.tsx] Placing', capsules.size, 'capsules in AR');
       ARWorldMapModule.placeCapsules(
         Array.from(capsules.values()).map(c => ({
           id: c.id,
           position: c.position,
           color: '#FFD700',
+          isOpened: c.isOpened,
         })),
       );
     }
-  }, [relocalized, capsules]);
+  }, [relocalized, capsules, gameState]);
 
   // Listen for capsule taps from native AR view
   useEffect(() => {
@@ -73,6 +74,7 @@ export default function ARScreen({
       const capsule = capsules.get(e.capsuleId);
       if (capsule) {
         openCapsule(capsule);
+        ARWorldMapModule.markCapsuleOpened(capsule.id);
       } else {
         console.warn(
           '[ar.tsx] Tapped capsule not found in backend data:',
