@@ -14,44 +14,32 @@ import CapsuleDetail from '../components/CapsuleDetail';
 import type { Capsule } from '../types';
 import { NavigationProp } from '@react-navigation/native';
 import { GameProvider, useGame } from '../context/gameContext';
+import { useAR } from '../context/arContext';
 
 export default function ARScreen({
   navigation,
 }: {
   navigation: NavigationProp<any>;
 }) {
-  const [trackingStatus, setTrackingStatus] = useState('initializing');
-  const [relocalized, setRelocalized] = useState(false);
+  // const [trackingStatus, setTrackingStatus] = useState('initializing');
+  // const [relocalized, setRelocalized] = useState(false);
   // const [capsules, setCapsules] = useState<null | Capsule[]>(null);
 
   const game = useGame();
 
+  const ar = useAR();
+
   if (!game) throw new Error('useGame didnt work');
+  if (!ar) throw new Error('useGame didnt work');
 
   const { capsules, selectedCapsule, setSelectedCapsule, openCapsule } = game;
 
+  const { localizeWorld, trackingStatus } = ar;
   // Fetch capsules from backend on mount
   // capsules is in useContext, accesible across all components, cleaner than leaving here.
   useEffect(() => {
-    const viewReadySub = ARWorldMapModule.onViewReady(() => {
-      console.log('[ar.tsx] Native view ready, loading world map');
-      ARWorldMapModule.startSessionFromBundle('arworldmap.data');
-    });
-
-    const relocalSub = ARWorldMapModule.onRelocalized(() => {
-      console.log('[ar.tsx] Relocalized');
-      setRelocalized(true);
-    });
-
-    const trackingSub = ARWorldMapModule.onTrackingStateChanged(e => {
-      setTrackingStatus(e.status);
-    });
-
-    return () => {
-      viewReadySub.remove();
-      relocalSub.remove();
-      trackingSub.remove();
-    };
+    const cleanup = localizeWorld();
+    return cleanup;
   }, []);
 
   // sets up a listener so when capsule is tapped, sets selected capsule, and then can be opened
@@ -77,11 +65,7 @@ export default function ARScreen({
       <ARWorldMapView style={styles.arView} />
       <View style={styles.overlay}>
         <Text style={styles.statusText}>Tracking: {trackingStatus}</Text>
-        <Text style={styles.statusText}>
-          {relocalized
-            ? 'Game will begin shortly...'
-            : 'Move your phone slowly to scan the area'}
-        </Text>
+
         <Button
           onPress={() => navigation.navigate('LeaderBoard')}
           title="test leaderboard"
