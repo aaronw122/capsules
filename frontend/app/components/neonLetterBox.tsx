@@ -36,7 +36,7 @@ export const NeonLetterBox = ({
     backgroundColor: letter ? `${color}14` : 'rgba(255,255,255,0.03)',
     shadowColor: letter ? color : 'transparent',
     shadowRadius: letter ? 10 : 0,
-    shadowOpsacity: letter ? 0.4 : 0,
+    shadowOpacity: letter ? 0.4 : 0,
     shadowOffset: { width: 0, height: 0 },
     transform: [{ scale: interpolate(progress.value, [0, 1], [1, 1.05]) }],
     opacity: interpolate(progress.value, [0, 1], [0.6, 1]),
@@ -69,10 +69,10 @@ export const NeonLetterBox = ({
 
 const styles = StyleSheet.create({
   box: {
-    width: 52,
-    height: 60,
-    borderRadius: 8,
-    borderWidth: 2,
+    width: 20,
+    height: 24,
+    borderRadius: 4,
+    borderWidth: 1,
     alignItems: 'center',
     justifyContent: 'center',
     margin: 4,

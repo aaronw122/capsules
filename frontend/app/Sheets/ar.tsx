@@ -22,11 +22,9 @@ export default function ARScreen({
   navigation: NavigationProp<any>;
 }) {
   const game = useGame();
-<<<<<<< HEAD
-=======
+
   console.log('game', game);
 
->>>>>>> 752a813 ( fixes for hud)
   const ar = useAR();
 
   if (!game) throw new Error('useGame didnt work');
@@ -85,10 +83,6 @@ const {
       <View style={styles.overlay}>
         <Text style={styles.statusText}>Tracking: {trackingStatus}</Text>
         {gameState === 'playing' ? <Hud /> : <Onboarding />}
-        <Button
-          onPress={() => navigation.navigate('LeaderBoard')}
-          title="test leaderboard"
-        />
       </View>
       {selectedCapsule && (
         <CapsuleDetail
@@ -112,11 +106,11 @@ const styles = StyleSheet.create({
   },
   overlay: {
     position: 'absolute',
-    top: 60,
+    top: 0,
     left: 0,
     right: 0,
     alignItems: 'center',
-    backgroundColor: 'rgba(0,0,0,0.5)',
+    backgroundColor: '#0a0a1a',
     paddingVertical: 8,
   },
   statusText: {

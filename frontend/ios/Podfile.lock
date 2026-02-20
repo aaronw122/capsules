@@ -1999,6 +1999,28 @@ PODS:
     - ReactCommon/turbomodule/core
     - ReactNativeDependencies
     - Yoga
+  - RNVectorIcons (10.3.0):
+    - hermes-engine
+    - RCTRequired
+    - RCTTypeSafety
+    - React-Core
+    - React-Core-prebuilt
+    - React-debug
+    - React-Fabric
+    - React-featureflags
+    - React-graphics
+    - React-ImageManager
+    - React-jsi
+    - React-NativeModulesApple
+    - React-RCTFabric
+    - React-renderercss
+    - React-rendererdebug
+    - React-utils
+    - ReactCodegen
+    - ReactCommon/turbomodule/bridging
+    - ReactCommon/turbomodule/core
+    - ReactNativeDependencies
+    - Yoga
   - RNWorklets (0.7.4):
     - hermes-engine
     - RCTRequired
@@ -2150,6 +2172,7 @@ DEPENDENCIES:
   - ReactNativeDependencies (from `../node_modules/react-native/third-party-podspecs/ReactNativeDependencies.podspec`)
   - RNReanimated (from `../node_modules/react-native-reanimated`)
   - RNScreens (from `../node_modules/react-native-screens`)
+  - RNVectorIcons (from `../node_modules/react-native-vector-icons`)
   - RNWorklets (from `../node_modules/react-native-worklets`)
   - Yoga (from `../node_modules/react-native/ReactCommon/yoga`)
 
@@ -2307,6 +2330,8 @@ EXTERNAL SOURCES:
     :path: "../node_modules/react-native-reanimated"
   RNScreens:
     :path: "../node_modules/react-native-screens"
+  RNVectorIcons:
+    :path: "../node_modules/react-native-vector-icons"
   RNWorklets:
     :path: "../node_modules/react-native-worklets"
   Yoga:
@@ -2393,6 +2418,7 @@ SPEC CHECKSUMS:
   RNReanimated: 66fa99647173f254f731e6aa59a0a2cc8c838ac1
 >>>>>>> 752a813 ( fixes for hud)
   RNScreens: 14243fa0d9842ffa7f8bb2d00b6c3cfd3ca817e8
+  RNVectorIcons: 4351544f100d4f12cac156a7c13399e60bab3e26
   RNWorklets: 30f9a363d681c776a5f9d74f6d21a6d1bb7bfe80
   Yoga: 772166513f9cd2d61a6251d0dacbbfaa5b537479
 
