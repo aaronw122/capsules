@@ -1,7 +1,7 @@
 import { View, StyleSheet, Text } from 'react-native';
 import { useAR } from '../context/arContext';
 
-const Onboarding = () => {
+export const Onboarding = () => {
   const ar = useAR();
 
   if (!ar) throw new Error('useAR hook not working');

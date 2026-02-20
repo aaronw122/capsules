@@ -15,6 +15,7 @@ import type { Capsule } from '../types';
 import { NavigationProp } from '@react-navigation/native';
 import { GameProvider, useGame } from '../context/gameContext';
 import { useAR } from '../context/arContext';
+import { Onboarding } from '../components/onboarding';
 
 export default function ARScreen({
   navigation,
@@ -65,7 +66,7 @@ export default function ARScreen({
       <ARWorldMapView style={styles.arView} />
       <View style={styles.overlay}>
         <Text style={styles.statusText}>Tracking: {trackingStatus}</Text>
-
+        <Onboarding />
         <Button
           onPress={() => navigation.navigate('LeaderBoard')}
           title="test leaderboard"
