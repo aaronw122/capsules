@@ -14,10 +14,10 @@ import {
 import { GameProvider } from './app/context/gameContext';
 import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
-import Onboarding from './app/(tabs)/index';
-import Call from './app/(tabs)/call';
-import { Login } from './app/(tabs)/login';
-import ARScreen from './app/(tabs)/ar';
+import Onboarding from './app/Sheets/index';
+import Call from './app/Sheets/call';
+import { Login } from './app/Sheets/login';
+import ARScreen from './app/Sheets/ar';
 import { RootStackParamList } from './app/types';
 import { Leaderboard } from './app/(tabs)/leaderboard';
 
