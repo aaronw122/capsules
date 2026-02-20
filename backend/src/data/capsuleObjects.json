@@ -1,186 +1,186 @@
 [
   {
-    "id": "71E3BE0F-DF79-45BC-A172-FACEAB89AD0F",
+    "id": "246F1371-4281-434D-A8D7-BD759339E2C3",
     "letter": "f",
     "number": 0,
     "isOpened": false,
-    "position": [-3.4779854, -1.2381865, -2.0422342],
+    "position": [-0.56238955, -1.0296211, -2.9753716],
     "content": {
       "name": "Frank",
       "funFact": "Can solve a Rubik's cube in under 30 seconds"
     }
   },
   {
-    "id": "3F629B7A-931A-4F13-8CE9-D0219AD12275",
+    "id": "2F337ABD-5F02-4C63-8A0A-07D3F483FB4F",
     "letter": "r",
     "number": 1,
     "isOpened": false,
-    "position": [3.0696616, -1.268829, -2.6966329],
+    "position": [1.0773207, -1.4203029, -5.7642527],
     "content": {
       "name": "Rachel",
       "funFact": "Has visited every continent except Antarctica"
     }
   },
   {
-    "id": "F3D1BACA-C668-4F21-A6CE-D2A2DBFB0316",
+    "id": "5364954A-5464-4221-A5AF-A1CC444B573D",
     "letter": "a",
     "number": 2,
     "isOpened": false,
-    "position": [3.2881563, 0.41291174, -2.920007],
+    "position": [-0.08299859, -0.39618805, -5.8069506],
     "content": {
       "name": "Andre",
       "funFact": "Once ate 47 hot dogs in a contest"
     }
   },
   {
-    "id": "5AAA6D41-75C6-4BC8-B3ED-3A784E6BFB88",
+    "id": "FE8CEC06-6DBF-4E8F-9694-1AD2F6C338C4",
     "letter": "c",
     "number": 3,
     "isOpened": false,
-    "position": [0.48419824, -1.2739589, 0.44833833],
+    "position": [-3.306607, -1.2889034, 0.36745882],
     "content": {
       "name": "Clara",
       "funFact": "Speaks four languages fluently"
     }
   },
   {
-    "id": "F13D5459-30F1-4DF4-A507-001D730179EF",
+    "id": "CE6DA62B-1BE0-49A6-A380-C599326B1255",
     "letter": "t",
     "number": 4,
     "isOpened": false,
-    "position": [5.1468725, -1.2361021, 0.62120175],
+    "position": [-5.7731457, 0.15901937, -0.70665884],
     "content": {
       "name": "Tony",
       "funFact": "Built a treehouse with no nails"
     }
   },
   {
-    "id": "88A85927-7791-4C65-AD9E-60CAD5998874",
+    "id": "9F77BB52-06BF-4E95-B3A2-212DF80381FF",
     "letter": "a",
     "number": 5,
     "isOpened": false,
-    "position": [5.329774, -1.2713138, 5.4570255],
+    "position": [-5.596011, -1.3078748, -5.2870603],
     "content": {
       "name": "Amara",
       "funFact": "Has a collection of over 200 vinyl records"
     }
   },
   {
-    "id": "B180CC63-7A03-4D9E-8348-A37C6BF9DDF6",
+    "id": "3F2AB5AA-2A5D-4AA2-9189-FF0207343F85",
     "letter": "l",
     "number": 6,
     "isOpened": false,
-    "position": [2.6740258, -1.2715963, 5.960607],
+    "position": [-7.7328525, -1.1824245, -2.513661],
     "content": {
       "name": "Leo",
       "funFact": "Can name every element on the periodic table from memory"
     }
   },
   {
-    "id": "22244FD6-EAE4-44A5-93CA-EE783756EE3A",
+    "id": "D728402E-5B9B-4D31-9F66-416D8A1D08C8",
     "letter": "i",
     "number": 7,
     "isOpened": false,
-    "position": [2.888329, -0.7885517, 12.606414],
+    "position": [-3.6493955, -1.3590314, -3.2522407],
     "content": {
       "name": "Iris",
       "funFact": "Learned to juggle in a single afternoon"
     }
   },
   {
-    "id": "51FC7763-9F45-4430-A322-5F826D3BAD62",
+    "id": "3410F048-659A-41B3-8186-B5B7EDBE6069",
     "letter": "s",
     "number": 8,
     "isOpened": false,
-    "position": [2.707191, -0.6324452, 10.592157],
+    "position": [-5.675649, -0.67606, -1.0521538],
     "content": {
       "name": "Sam",
       "funFact": "Has never lost a game of Connect Four"
     }
   },
   {
-    "id": "433BDF5B-CB55-4BAE-8A08-FE597E7CC46C",
+    "id": "9F206D06-4E70-4332-969B-77FEF188FF1D",
     "letter": "s",
     "number": 9,
     "isOpened": false,
-    "position": [1.0448893, -0.54402614, 10.735379],
+    "position": [-0.7855745, -1.2756395, 0.12392922],
     "content": {
       "name": "Sofia",
       "funFact": "Ran a marathon with zero training"
     }
   },
   {
-    "id": "EF222335-FF94-45F1-84D8-245290A1136D",
+    "id": "F8BBFC93-C6AC-48E0-BDA9-3DC905B3DD0D",
     "letter": "u",
     "number": 10,
     "isOpened": false,
-    "position": [0.52363694, -1.2553909, 6.5305815],
+    "position": [1.4952594, -1.4690028, -0.22414224],
     "content": {
       "name": "Umar",
       "funFact": "Can whistle any song after hearing it once"
     }
   },
   {
-    "id": "4FA6696C-AAE4-44DF-94AC-CE6A97B9063F",
+    "id": "35179137-F962-4745-88F5-BA84BD4BD9B7",
     "letter": "p",
     "number": 11,
     "isOpened": false,
-    "position": [0.15237138, -0.31935027, 6.656484],
+    "position": [4.154021, -1.0656818, -1.0067784],
     "content": {
       "name": "Priya",
       "funFact": "Taught herself piano from YouTube videos"
     }
   },
   {
-    "id": "D8A84868-9FDA-4B7C-8DAC-32B0D95DFC4E",
+    "id": "CABC61D5-0B01-4E6A-AB42-3CA324D99F43",
     "letter": "e",
     "number": 12,
     "isOpened": false,
-    "position": [-1.5659487, -0.35120243, 6.817809],
+    "position": [0.74801135, -1.477256, -5.0224433],
     "content": {
       "name": "Ethan",
       "funFact": "Has a pet tortoise that is 40 years old"
     }
   },
   {
-    "id": "9E1D7217-91E9-41A2-AA34-4B726D7AE69B",
+    "id": "54D0F24D-9832-4CB7-95D6-C6B412CD077F",
     "letter": "r",
     "number": 13,
     "isOpened": false,
-    "position": [-1.4118023, -0.0764838, 4.2832446],
+    "position": [4.382811, -1.4386905, -5.91986],
     "content": {
       "name": "Rosa",
       "funFact": "Won a local chili cook-off three years in a row"
     }
   },
   {
-    "id": "8F1172F3-EA29-4FBA-B4CE-7182633F4EE1",
+    "id": "2299F677-5E41-4382-9BC6-B9FE371D6B26",
     "letter": "i",
     "number": 14,
     "isOpened": false,
-    "position": [-4.377363, -0.21348426, 2.0482476],
+    "position": [2.826295, -0.39655805, -6.162721],
     "content": {
       "name": "Ivan",
       "funFact": "Can do a backflip on flat ground"
     }
   },
   {
-    "id": "9B778DCF-691E-49D4-9817-5A2CA1F4C7D6",
+    "id": "1FB5F6DA-5AD6-4ACF-A091-31AC6230A88C",
     "letter": "o",
     "number": 15,
     "isOpened": false,
-    "position": [-2.628968, -0.3536335, 0.7645241],
+    "position": [2.803368, -1.4505684, -1.6394805],
     "content": {
       "name": "Olivia",
       "funFact": "Once found a four-leaf clover on three consecutive days"
     }
   },
   {
-    "id": "B90A89F9-00F6-4C41-88DF-BC647F2F5D76",
+    "id": "A8479A31-8220-4FE5-B5CB-C39C62F03F1E",
     "letter": "r",
     "number": 16,
     "isOpened": false,
-    "position": [-2.0469902, -0.82573706, 0.6830018],
+    "position": [-0.91573715, -1.474879, -4.261113],
     "content": {
       "name": "Raj",
       "funFact": "Built a working radio out of spare parts"
