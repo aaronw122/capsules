@@ -17,6 +17,13 @@ export function setEndsAt(val: number) {
   endsAt = val;
 } // setter for tests
 
+export let gameDuration: number = 300000; // 5 minutes in ms
+export function setGameDuration(val: number) {
+  gameDuration = val;
+} // setter for tests
+
+export let gameTimer: ReturnType<typeof setTimeout> | null = null; // tracks the game over timeout
+
 const io = new Server(httpServer);
 
 // Listen for client connections
@@ -72,11 +79,18 @@ io.on('connection', (socket) => {
 
 // HTTP Endpoint: Starting the game and broadcasting that to all clients
 app.post('/game/start', (req, res) => {
-  endsAt = Date.now() + 300000; // runs JS method to get current time (12:30pm) in ms and adds 5min in ms to get set end time for game
-  io.emit('gameStart', endsAt); // broadcast set end time (12:35pm) to all connect clients
+  endsAt = Date.now() + gameDuration; // runs JS method to get current time (12:30pm) in ms and adds game duration to get set end time for game
 
+  // set timer for server to broadcast game over when time runs out
+  gameTimer = setTimeout(() => {
+    io.emit('gameOver', 'gameOver'); // broadcast game ended
+    const leaderboardArray = Array.from(leaderboard.values()); // convert leaderboard to an array
+    io.emit('leaderboardUpdate', leaderboardArray); // broadcast leaderboard to all clients
+  }, gameDuration);
+
+  io.emit('gameStart', endsAt); // broadcast set end time (12:35pm) to all connect clients
   const leaderboardArray = Array.from(leaderboard.values()); // convert leaderboard to an array
-  io.emit('sendLeaderboard', leaderboardArray); // broadcast leaderboard to all clients
+  io.emit('leaderboardUpdate', leaderboardArray); // broadcast leaderboard to all clients
   res.status(200).json({ message: 'Game Started' });
 });
 
