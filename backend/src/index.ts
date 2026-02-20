@@ -18,7 +18,7 @@ export function setEndsAt(val: number) {
 } // setter for tests
 
 // export let gameDuration: number = 300000; // 5 minutes in ms
-export let gameDuration: number = 60000;
+export let gameDuration: number = 300000;
 export function setGameDuration(val: number) {
   gameDuration = val;
 } // setter for tests

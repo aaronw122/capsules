@@ -1,0 +1,7 @@
+services:
+  capsules:
+    build: .
+    image: capsules:latest
+    ports:
+      - '4000:3000'
+    restart: unless-stopped
