@@ -2,6 +2,7 @@ import { useContext, createContext, useState, useEffect } from 'react';
 import Config from 'react-native-config';
 
 import {
+  Capsule,
   GameContext,
   GameState,
   LeaderBoard,
@@ -39,24 +40,35 @@ export function GameProvider({ children }: { children: React.ReactNode }) {
   const [newName, setNewName] = useState<string>('');
   const [leaderBoard, setLeaderBoard] = useState<[] | LeaderBoard>([]);
   const [gameState, setGameState] = useState<null | GameState>(null);
+  const [capsules, setCapsules] = useState<null | Capsule[]>(null);
+  const [selectedCapsule, setSelectedCapsule] = useState<Capsule | null>(null);
 
   const handleNameChange = (text: string) => {
     setNewName(text);
   };
 
-  /*
-    const newPlayer = {
-      id: data.id,
-      name: data.name,
-      capsules: data.capsules,
-      completedAt: null
-    }
-  */
-
   //websockets will receive updated leaderboard from server. add mock data for now.
+
+  const fetchCapsules = async () => {
+    try {
+      const response = await fetch(`${Config.BASE_URL}/capsules`);
+      const data: Capsule[] = await response.json();
+      setCapsules(data);
+      console.log(`[ar.tsx] Fetched ${data.length} capsules from backend`);
+    } catch (err) {
+      console.error('[ar.tsx] Failed to fetch capsules:', err);
+    }
+  };
+
+  //openCapsule function
+  // useEffect with selectedCapsule dep
 
   useEffect(() => {
     setLeaderBoard(mockLeaderBoard);
+  }, []);
+
+  useEffect(() => {
+    fetchCapsules();
   }, []);
 
   //fire this once the user submit name
@@ -95,6 +107,10 @@ export function GameProvider({ children }: { children: React.ReactNode }) {
         handleNameChange,
         leaderBoard,
         setLeaderBoard,
+        capsules,
+        setCapsules,
+        selectedCapsule,
+        setSelectedCapsule,
       }}
     >
       {children}

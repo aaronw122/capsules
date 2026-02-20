@@ -14,6 +14,7 @@ import CapsuleDetail from '../components/CapsuleDetail';
 import Config from 'react-native-config';
 import type { Capsule } from '../types';
 import { NavigationProp } from '@react-navigation/native';
+import { useGame } from '../context/gameContext';
 
 export default function ARScreen({
   navigation,
@@ -22,12 +23,16 @@ export default function ARScreen({
 }) {
   const [trackingStatus, setTrackingStatus] = useState('initializing');
   const [relocalized, setRelocalized] = useState(false);
-  const [selectedCapsule, setSelectedCapsule] = useState<Capsule | null>(null);
-  const [capsulesMap, setCapsulesMap] = useState<Map<string, Capsule>>(
-    new Map(),
-  );
+  // const [capsules, setCapsules] = useState<null | Capsule[]>(null);
+
+  const game = useGame();
+
+  if (!game) throw new Error('useGame didnt work');
+
+  const { capsules, selectedCapsule, setSelectedCapsule } = game;
 
   // Fetch capsules from backend on mount
+  // capsules is in useContext, accesible across all components, cleaner than leaving here.
   useEffect(() => {
     const viewReadySub = ARWorldMapModule.onViewReady(() => {
       console.log('[ar.tsx] Native view ready, loading world map');
@@ -43,20 +48,6 @@ export default function ARScreen({
       setTrackingStatus(e.status);
     });
 
-    // Fetch real capsule data from backend
-    const fetchCapsules = async () => {
-      try {
-        const response = await fetch(`${Config.BASE_URL}/capsules`);
-        const data: Capsule[] = await response.json();
-        const map = new Map(data.map(c => [c.id, c]));
-        setCapsulesMap(map);
-        console.log(`[ar.tsx] Fetched ${data.length} capsules from backend`);
-      } catch (err) {
-        console.error('[ar.tsx] Failed to fetch capsules:', err);
-      }
-    };
-    fetchCapsules();
-
     return () => {
       viewReadySub.remove();
       relocalSub.remove();
@@ -64,11 +55,11 @@ export default function ARScreen({
     };
   }, []);
 
-  // Tap handler — re-subscribes when capsulesMap updates so the
-  // closure always has the latest data
+  // sets up a listener so when capsule is tapped, sets selected capsule, and then can be opened
   useEffect(() => {
     const tapSub = ARWorldMapModule.onCapsuleTapped(e => {
-      const capsule = capsulesMap.get(e.capsuleId);
+      if (!capsules) return null;
+      const capsule = capsules.find(el => el.id === e.capsuleId);
       if (capsule) {
         setSelectedCapsule(capsule);
       } else {
@@ -80,7 +71,7 @@ export default function ARScreen({
     });
 
     return () => tapSub.remove();
-  }, [capsulesMap]);
+  }, [capsules]);
 
   return (
     <View style={styles.container}>
@@ -88,7 +79,9 @@ export default function ARScreen({
       <View style={styles.overlay}>
         <Text style={styles.statusText}>Tracking: {trackingStatus}</Text>
         <Text style={styles.statusText}>
-          Relocalized: {relocalized ? 'Yes' : 'No'}
+          {relocalized
+            ? 'Game will begin shortly...'
+            : 'Move your phone slowly to scan the area'}
         </Text>
         <Button
           onPress={() => navigation.navigate('LeaderBoard')}
