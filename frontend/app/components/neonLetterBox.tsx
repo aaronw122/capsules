@@ -9,7 +9,17 @@ import Animated, {
   interpolate, // maps one range of values to another (e.g., 0→1 maps to 0→10 for shadow)
 } from 'react-native-reanimated';
 
-export const NeonLetterBox = ({ letter, color = '#0ff', index = 0 }) => {
+type NeonLetterBoxProps = {
+  letter?: string | null;
+  color?: string;
+  index?: number;
+};
+
+export const NeonLetterBox = ({
+  letter,
+  color = '#0ff',
+  index = 0,
+}: NeonLetterBoxProps) => {
   const progress = useSharedValue(letter ? 0 : 1);
 
   useEffect(() => {

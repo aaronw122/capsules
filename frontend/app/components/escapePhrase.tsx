@@ -1,9 +1,10 @@
 import { useGame } from '../context/gameContext';
 import { NeonLetterBox } from './neonLetterBox';
+import { View } from 'react-native';
 
-const Phrase = () => {
+export const Phrase = () => {
   const game = useGame();
-  if (!game) new Error('game not working');
+  if (!game) throw new Error('game not working');
 
   const { escapePhrase } = game;
   return (

@@ -43,7 +43,7 @@ export function GameProvider({ children }: { children: React.ReactNode }) {
   const [newName, setNewName] = useState<string>('');
   const [leaderBoard, setLeaderBoard] = useState<[] | LeaderBoard>([]);
   const [gameState, setGameState] = useState<null | GameState>(null);
-  const [capsules, setCapsules] = useState<null | Capsule[]>(null);
+  const [capsules, setCapsules] = useState<Map<string, Capsule>>(new Map());
   const [selectedCapsule, setSelectedCapsule] = useState<Capsule | null>(null);
   const [endTime, setEndTime] = useState<number>(0);
   const [escapePhrase, setEscapePhrase] = useState<(string | null)[]>([
@@ -77,7 +77,11 @@ export function GameProvider({ children }: { children: React.ReactNode }) {
     try {
       const response = await fetch(`${Config.BASE_URL}/capsules`);
       const data: Capsule[] = await response.json();
-      setCapsules(data);
+      const newCapsules = new Map();
+      data.forEach(el => {
+        newCapsules.set(el.id, el);
+      });
+      setCapsules(newCapsules);
     } catch (err) {
       console.error('[ar.tsx] Failed to fetch capsules:', err);
     }
@@ -114,15 +118,25 @@ export function GameProvider({ children }: { children: React.ReactNode }) {
 
   //openCapsule function
   const openCapsule = (capsule: Capsule) => {
-    capsule.isOpened = true;
+    if (!capsule.isOpened) {
+      const newCapsule = { ...capsule, isOpened: true };
+
+      setCapsules(prev => {
+        const next = new Map(prev);
+        next.set(newCapsule.id, newCapsule);
+        return next;
+      });
+      setSelectedCapsule(newCapsule);
+      const updatedEscapePhrase = [...escapePhrase];
+      updatedEscapePhrase[capsule.number] = capsule.letter;
+      setEscapePhrase(updatedEscapePhrase);
+
+      // emit event to update player state and leaderboard
+      websocket.current?.emit('openCapsule', playerState?.id);
+    }
+
     setSelectedCapsule(capsule);
     // updating player's progress on escape phrase
-    const updatedEscapePhrase = [...escapePhrase];
-    updatedEscapePhrase[capsule.number] = capsule.letter;
-    setEscapePhrase(updatedEscapePhrase);
-
-    // emit event to update player state and leaderboard
-    websocket.current?.emit('openCapsule', playerState?.id);
   };
 
   useEffect(() => {
