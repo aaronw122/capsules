@@ -58,7 +58,7 @@ export default function ARScreen({
   useEffect(() => {
     const tapSub = ARWorldMapModule.onCapsuleTapped(e => {
       if (!capsules) return null;
-      const capsule = capsules.find(el => el.id === e.capsuleId);
+      const capsule = capsules.get(e.capsuleId);
       if (capsule) {
         openCapsule(capsule);
       } else {

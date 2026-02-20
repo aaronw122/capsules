@@ -28,8 +28,8 @@ export type GameContext = {
   createPlayer: () => Promise<PlayerState>;
   leaderBoard: LeaderBoard | [];
   setLeaderBoard: React.Dispatch<React.SetStateAction<[] | PlayerState[]>>;
-  capsules: Capsule[] | null;
-  setCapsules: React.Dispatch<React.SetStateAction<null | Capsule[]>>;
+  capsules: Map<string, Capsule>;
+  setCapsules: React.Dispatch<React.SetStateAction<Map<string, Capsule>>>;
   selectedCapsule: Capsule | null;
   setSelectedCapsule: React.Dispatch<React.SetStateAction<null | Capsule>>;
   escapePhrase: (string | null)[];
