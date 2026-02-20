@@ -15,6 +15,7 @@ import type { Capsule } from '../types';
 import { NavigationProp } from '@react-navigation/native';
 import { GameProvider, useGame } from '../context/gameContext';
 import { useAR } from '../context/arContext';
+import { useAR } from '../context/arContext';
 import { Onboarding } from '../components/onboarding';
 
 export default function ARScreen({
@@ -24,21 +25,29 @@ export default function ARScreen({
 }) {
   // const [trackingStatus, setTrackingStatus] = useState('initializing');
   // const [relocalized, setRelocalized] = useState(false);
+  // const [trackingStatus, setTrackingStatus] = useState('initializing');
+  // const [relocalized, setRelocalized] = useState(false);
   // const [capsules, setCapsules] = useState<null | Capsule[]>(null);
 
   const game = useGame();
 
   const ar = useAR();
 
+  const ar = useAR();
+
   if (!game) throw new Error('useGame didnt work');
+  if (!ar) throw new Error('useGame didnt work');
   if (!ar) throw new Error('useGame didnt work');
 
   const { capsules, selectedCapsule, setSelectedCapsule, openCapsule } = game;
 
   const { localizeWorld, trackingStatus } = ar;
+  const { localizeWorld, trackingStatus } = ar;
   // Fetch capsules from backend on mount
   // capsules is in useContext, accesible across axll components, cleaner than leaving here.
   useEffect(() => {
+    const cleanup = localizeWorld();
+    return cleanup;
     const cleanup = localizeWorld();
     return cleanup;
   }, []);
@@ -80,6 +89,7 @@ export default function ARScreen({
       <ARWorldMapView style={styles.arView} />
       <View style={styles.overlay}>
         <Text style={styles.statusText}>Tracking: {trackingStatus}</Text>
+
         <Onboarding />
         <Button
           onPress={() => navigation.navigate('LeaderBoard')}
