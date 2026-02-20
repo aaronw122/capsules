@@ -20,14 +20,13 @@ export const Login = ({ navigation }: { navigation: NavigationProp<any> }) => {
     createPlayer,
     setPlayerState,
     leaderBoard,
+    webSocketConnection,
   } = game;
 
   const joinLobby = async () => {
+    webSocketConnection();
     const player = await createPlayer();
     setPlayerState(player);
-    console.log('player', player);
-    console.log('leaderboard: ', leaderBoard);
-
     // navigates to ar.tsx, player orients themselves
     navigation.navigate('AR');
   };

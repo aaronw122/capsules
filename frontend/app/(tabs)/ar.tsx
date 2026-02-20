@@ -6,12 +6,11 @@
 //       placeCapsules() → renderer renders spheres → tap fires JS event
 
 import React, { useEffect, useState } from 'react';
-import { View, Text, Alert, StyleSheet, Button } from 'react-native';
+import { View, Text, StyleSheet, Button } from 'react-native';
 //import map view and map module
 import { ARWorldMapView } from '../native/ARWorldMapView';
 import ARWorldMapModule from '../native/ARWorldMapModule';
 import CapsuleDetail from '../components/CapsuleDetail';
-import Config from 'react-native-config';
 import type { Capsule } from '../types';
 import { NavigationProp } from '@react-navigation/native';
 import { GameProvider, useGame } from '../context/gameContext';
@@ -29,35 +28,7 @@ export default function ARScreen({
 
   if (!game) throw new Error('useGame didnt work');
 
-  const {
-    capsules,
-    selectedCapsule,
-    setSelectedCapsule,
-    openCapsule,
-    gameState,
-    escapePhrase,
-    leaderBoard,
-  } = game;
-
-  useEffect(() => {
-    console.log('gameState changed: ', gameState);
-
-    const capsule1 = {
-      id: '1',
-      letter: 'F',
-      number: 1,
-      isOpened: false,
-      position: [2, 2, 2],
-      content: {
-        name: 'string',
-        funFact: 'string',
-      },
-    };
-    openCapsule(capsule1);
-    console.log('leaderboard after open capsule: ', leaderBoard);
-    console.log('escapePhrase after open capsule: ', escapePhrase);
-    console.log('selected capsule open status: ', selectedCapsule?.isOpened);
-  }, [gameState]);
+  const { capsules, selectedCapsule, setSelectedCapsule, openCapsule } = game;
 
   // Fetch capsules from backend on mount
   // capsules is in useContext, accesible across all components, cleaner than leaving here.
@@ -119,8 +90,7 @@ export default function ARScreen({
       {selectedCapsule && (
         <CapsuleDetail
           capsule={selectedCapsule}
-          onCollect={id => {
-            console.log('Collected:', id);
+          onCollect={() => {
             setSelectedCapsule(null);
           }}
           onDismiss={() => setSelectedCapsule(null)}

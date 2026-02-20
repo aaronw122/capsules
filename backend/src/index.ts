@@ -90,6 +90,7 @@ app.post('/game/start', (req, res) => {
   }, gameDuration);
 
   io.emit('gameStart', endsAt); // broadcast set end time (12:35pm) to all connect clients
+  console.log('broadcasted webSocket!');
   const leaderboardArray = Array.from(leaderboard.values()); // convert leaderboard to an array
   io.emit('leaderboardUpdate', leaderboardArray); // broadcast leaderboard to all clients
   res.status(200).json({ message: 'Game Started' });
