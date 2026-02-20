@@ -42,6 +42,13 @@ export type GameContext = {
   webSocketConnection: () => void;
 };
 
+export type ArContext = {
+  relocalized: boolean;
+  setRelocalized: React.Dispatch<React.SetStateAction<boolean>>;
+  trackingStatus: string;
+  localizeWorld: () => void;
+};
+
 export type RootStackParamList = {
   Onboarding: undefined;
   Call: undefined;
