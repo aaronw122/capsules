@@ -48,7 +48,7 @@ export default function ARScreen({
   // Listen for game state to change to gameOver then display final leaderboard
   useEffect(() => {
     if (gameState === 'gameOver') {
-      navigation.navigate('Leaderboard');
+      navigation.navigate('LeaderBoard');
     }
   }, [gameState]);
 
