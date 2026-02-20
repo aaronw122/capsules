@@ -1,7 +1,7 @@
 import { describe, it, expect, beforeAll, afterAll, beforeEach } from 'bun:test';
 import request from 'supertest';
 import { io as ioc, type Socket as ClientSocket } from 'socket.io-client';
-import { app, httpServer, leaderboard, setEndsAt } from './index';
+import { app, httpServer, leaderboard, setEndsAt, setGameDuration, gameTimer } from './index';
 
 const TEST_PORT = 3001;
 let serverUrl: string;
@@ -20,6 +20,8 @@ afterAll((done) => {
 beforeEach(() => {
   leaderboard.clear();
   setEndsAt(0);
+  setGameDuration(300000); // reset to default 5min
+  if (gameTimer) clearTimeout(gameTimer); // clear any pending game over timers from previous tests
 });
 
 // Helper: create a socket client connected to the test server
@@ -34,6 +36,16 @@ function createClient(): Promise<ClientSocket> {
 async function addPlayer(name: string) {
   const res = await request(app).post('/add/player').send({ name });
   return res.body;
+}
+
+// Helper: start the game and consume the initial leaderboardUpdate broadcast
+// so subsequent listeners only catch openCapsule-triggered updates
+async function startGame(client: ClientSocket) {
+  const initialLbPromise = new Promise<void>((resolve) => {
+    client.once('leaderboardUpdate', () => resolve());
+  });
+  await request(app).post('/game/start');
+  await initialLbPromise;
 }
 
 // ==================== HTTP ENDPOINT TESTS ====================
@@ -123,7 +135,7 @@ describe('POST /game/start', () => {
     const client = await createClient();
 
     const leaderboardPromise = new Promise<any[]>((resolve) => {
-      client.on('sendLeaderboard', (lb: any[]) => resolve(lb));
+      client.on('leaderboardUpdate', (lb: any[]) => resolve(lb));
     });
 
     await request(app).post('/game/start');
@@ -131,6 +143,36 @@ describe('POST /game/start', () => {
 
     expect(lb.length).toBe(2);
     expect(lb.map((p: any) => p.name).sort()).toEqual(['Alice', 'Bob']);
+
+    client.disconnect();
+  });
+
+  it('should broadcast gameOver and final leaderboard when timer expires', async () => {
+    setGameDuration(200); // 200ms for testing instead of 5 minutes
+
+    await addPlayer('Alice');
+    await addPlayer('Bob');
+
+    const client = await createClient();
+
+    const gameOverPromise = new Promise<string>((resolve) => {
+      client.on('gameOver', (data: string) => resolve(data));
+    });
+
+    // Start game and consume the initial leaderboardUpdate
+    await startGame(client);
+
+    // Now listen for the final leaderboard from the gameOver timer
+    const finalLeaderboardPromise = new Promise<any[]>((resolve) => {
+      client.on('leaderboardUpdate', (lb: any[]) => resolve(lb));
+    });
+
+    // Wait for the short timer to fire
+    const gameOverData = await gameOverPromise;
+    const lb = await finalLeaderboardPromise;
+
+    expect(gameOverData).toBe('gameOver');
+    expect(lb.length).toBe(2);
 
     client.disconnect();
   });
@@ -143,8 +185,8 @@ describe('openCapsule event', () => {
     const player = await addPlayer('Alice');
     const client = await createClient();
 
-    // Start the game so openCapsule events are processed
-    await request(app).post('/game/start');
+    // Start the game and consume initial leaderboard broadcast
+    await startGame(client);
 
     const leaderboardPromise = new Promise<any[]>((resolve) => {
       client.on('leaderboardUpdate', (lb: any[]) => resolve(lb));
@@ -166,13 +208,10 @@ describe('openCapsule event', () => {
     const bob = await addPlayer('Bob');
     const client = await createClient();
 
-    await request(app).post('/game/start');
+    await startGame(client);
 
     // Alice opens 2 capsules, Bob opens 1
     let lastLb: any[];
-    client.on('leaderboardUpdate', (lb: any[]) => {
-      lastLb = lb;
-    });
 
     // Alice opens capsule 1
     await new Promise<void>((resolve) => {
@@ -209,7 +248,7 @@ describe('openCapsule event', () => {
     const bob = await addPlayer('Bob');
     const client = await createClient();
 
-    await request(app).post('/game/start');
+    await startGame(client);
 
     // Alice opens first
     await new Promise<void>((resolve) => {
@@ -284,7 +323,7 @@ describe('openCapsule event', () => {
   it('should ignore openCapsule for invalid player id', async () => {
     const client = await createClient();
 
-    await request(app).post('/game/start');
+    await startGame(client);
 
     let received = false;
     client.on('leaderboardUpdate', () => {
@@ -303,7 +342,7 @@ describe('openCapsule event', () => {
     const player = await addPlayer('Alice');
     const client = await createClient();
 
-    await request(app).post('/game/start');
+    await startGame(client);
 
     // Open 17 capsules
     for (let i = 0; i < 17; i++) {
@@ -325,7 +364,7 @@ describe('openCapsule event', () => {
     const player = await addPlayer('Alice');
     const client = await createClient();
 
-    await request(app).post('/game/start');
+    await startGame(client);
 
     // Open 17 capsules
     for (let i = 0; i < 17; i++) {
@@ -354,7 +393,15 @@ describe('openCapsule event', () => {
     const client1 = await createClient();
     const client2 = await createClient();
 
+    // Start game and consume initial broadcast on both clients
+    const initialLb1 = new Promise<void>((resolve) => {
+      client1.once('leaderboardUpdate', () => resolve());
+    });
+    const initialLb2 = new Promise<void>((resolve) => {
+      client2.once('leaderboardUpdate', () => resolve());
+    });
     await request(app).post('/game/start');
+    await Promise.all([initialLb1, initialLb2]);
 
     const promise1 = new Promise<any[]>((resolve) => {
       client1.on('leaderboardUpdate', (lb: any[]) => resolve(lb));
@@ -410,7 +457,7 @@ describe('openCapsule event', () => {
     }
 
     const client = await createClient();
-    await request(app).post('/game/start');
+    await startGame(client);
 
     // Give each player a different number of capsules opened:
     // Alice: 15, Bob: 3, Charlie: 10, Dave: 7, Eve: 17 (winner),
