@@ -24,10 +24,6 @@ export const Leaderboard = () => {
     </View>
   );
 
-  const sortedLeaderboard: LeaderBoard = [...leaderBoard].sort(
-    (a, b) => a.rank - b.rank,
-  );
-
   const renderItem = ({ item }: { item: PlayerState }) => (
     <Line
       key={item.id}
@@ -41,7 +37,7 @@ export const Leaderboard = () => {
   return (
     <FlatList
       style={styles.container}
-      data={sortedLeaderboard}
+      data={leaderBoard}
       keyExtractor={item => item.id}
       renderItem={renderItem}
       ListHeaderComponent={renderHeaders}

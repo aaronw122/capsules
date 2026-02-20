@@ -37,7 +37,16 @@ function App() {
       <GameProvider>
         <ARProvider>
           <NavigationContainer>
-            <Stack.Navigator>
+            <Stack.Navigator
+              screenOptions={{
+                headerTitle: '',
+                headerStyle: { backgroundColor: '#0a0a1a' },
+                headerShadowVisible: false,
+                headerTintColor: '#00f0ff',
+                headerBackTitle: 'Back',
+                contentStyle: { backgroundColor: '#0a0a1a' },
+              }}
+            >
               <Stack.Screen name="Onboarding" component={Onboarding} />
               <Stack.Screen name="Call" component={Call} />
               <Stack.Screen name="Login" component={Login} />

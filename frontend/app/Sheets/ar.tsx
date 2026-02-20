@@ -14,6 +14,7 @@ import { NavigationProp } from '@react-navigation/native';
 import { useGame } from '../context/gameContext';
 import { useAR } from '../context/arContext';
 import { Onboarding } from '../components/onboarding';
+import { Hud } from '../components/hud';
 
 export default function ARScreen({
   navigation,
@@ -21,12 +22,21 @@ export default function ARScreen({
   navigation: NavigationProp<any>;
 }) {
   const game = useGame();
+
+  console.log('game', game);
+
   const ar = useAR();
 
   if (!game) throw new Error('useGame didnt work');
   if (!ar) throw new Error('useAR didnt work');
 
-  const { capsules, selectedCapsule, setSelectedCapsule, openCapsule } = game;
+const {
+  capsules,
+  selectedCapsule,
+  setSelectedCapsule,
+  openCapsule,
+  gameState,
+  } = game;
   const { localizeWorld, trackingStatus, relocalized } = ar;
 
   // Start AR session and listen for relocalization
@@ -72,11 +82,7 @@ export default function ARScreen({
       <ARWorldMapView style={styles.arView} />
       <View style={styles.overlay}>
         <Text style={styles.statusText}>Tracking: {trackingStatus}</Text>
-        <Onboarding />
-        <Button
-          onPress={() => navigation.navigate('LeaderBoard')}
-          title="test leaderboard"
-        />
+        {gameState === 'playing' ? <Hud /> : <Onboarding />}
       </View>
       {selectedCapsule && (
         <CapsuleDetail
@@ -100,11 +106,11 @@ const styles = StyleSheet.create({
   },
   overlay: {
     position: 'absolute',
-    top: 60,
+    top: 0,
     left: 0,
     right: 0,
     alignItems: 'center',
-    backgroundColor: 'rgba(0,0,0,0.5)',
+    backgroundColor: '#0a0a1a',
     paddingVertical: 8,
   },
   statusText: {

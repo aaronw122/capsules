@@ -1,10 +1,19 @@
 import { Phrase } from './escapePhrase';
 import { Timer } from './timer';
-import { View } from 'react-native';
+import { View, StyleSheet } from 'react-native';
 
-const Hud = () => {
-  <View>
-    <Phrase />
-    <Timer />
-  </View>;
+export const Hud = () => {
+  return (
+    <View style={styles.container}>
+      <Timer />
+      <Phrase />
+    </View>
+  );
 };
+
+const styles = StyleSheet.create({
+  container: {
+    flexDirection: 'row',
+    marginHorizontal: 3,
+  },
+});

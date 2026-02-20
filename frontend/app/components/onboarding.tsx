@@ -1,5 +1,6 @@
 import { View, StyleSheet, Text } from 'react-native';
 import { useAR } from '../context/arContext';
+import { LocalizeMessage } from './localizeMessage';
 
 export const Onboarding = () => {
   const ar = useAR();
@@ -9,11 +10,9 @@ export const Onboarding = () => {
   const { relocalized } = ar;
 
   return (
-    <View style={styles.overlay}>
+    <View>
       <Text style={styles.statusText}>
-        {relocalized
-          ? 'Game will begin shortly...'
-          : 'Move your phone slowly to scan the area'}
+        {relocalized ? 'Game will begin shortly...' : <LocalizeMessage />}
       </Text>
     </View>
   );
@@ -37,6 +36,6 @@ const styles = StyleSheet.create({
   statusText: {
     color: '#fff',
     fontFamily: 'monospace',
-    fontSize: 14,
+    fontSize: 20,
   },
 });
