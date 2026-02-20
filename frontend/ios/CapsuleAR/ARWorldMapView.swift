@@ -79,10 +79,15 @@ class ARWorldMapView: ARSCNView, ARSCNViewDelegate, ARSessionDelegate {
     // and looked up by anchor name in renderer(_:didAdd:for:).
 
     func placeCapsules(capsules: [[String: Any]]) {
+        let existingNames = Set(self.session.currentFrame?.anchors.compactMap { $0.name } ?? [])
         for capsule in capsules {
             guard let id = capsule["id"] as? String,
                   let position = capsule["position"] as? [Double],
                   position.count == 3 else { continue }
+            guard !existingNames.contains(id) else {
+                print("[ARWorldMapView] Anchor already exists, skipping: \(id)")
+                continue
+            }
 
             // CONFIGURABLE: Fallback color if capsule has no color defined in capsuleContent.json.
             // Gold (#FFD700) is the default. Change to match your game's theme.
@@ -102,6 +107,7 @@ class ARWorldMapView: ARSCNView, ARSCNViewDelegate, ARSessionDelegate {
     }
 
     private var capsuleColors: [String: UIColor] = [:]
+    private var renderedAnchorIDs: Set<String> = []
 
     // Tap handling
     // Uses SceneKit hit testing (not ARKit raycasting) to find which 3D node
@@ -136,6 +142,11 @@ class ARWorldMapView: ARSCNView, ARSCNViewDelegate, ARSessionDelegate {
     func renderer(_ renderer: any SCNSceneRenderer, didAdd node: SCNNode, for anchor: ARAnchor) {
         print("[ARWorldMapView] didAdd anchor: type=\(type(of: anchor)) name=\(anchor.name ?? "nil")")
         guard let name = anchor.name, !name.isEmpty else { return }
+        guard !renderedAnchorIDs.contains(name) else {
+            print("[ARWorldMapView] Skipping duplicate anchor: \(name)")
+            return
+        }
+        renderedAnchorIDs.insert(name)
 
         print("[ARWorldMapView] Rendering capsule sphere for: \(name)")
         let color = capsuleColors[name] ?? .systemYellow

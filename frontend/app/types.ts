@@ -11,7 +11,6 @@ export type PlayerLeaderBoard = {
   name: string;
   capsules: number;
   rank: number;
-  capsuleTimestamp: number | null;
   completedAt: number | null;
 };
 

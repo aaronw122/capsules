@@ -5,15 +5,13 @@
 // Flow: onViewReady → startSessionFromBundle('arworldmap.data') → ARKit relocalizes →
 //       placeCapsules() → renderer renders spheres → tap fires JS event
 
-import React, { useEffect, useState } from 'react';
+import React, { useEffect } from 'react';
 import { View, Text, StyleSheet, Button } from 'react-native';
-//import map view and map module
 import { ARWorldMapView } from '../native/ARWorldMapView';
 import ARWorldMapModule from '../native/ARWorldMapModule';
 import CapsuleDetail from '../components/CapsuleDetail';
-import type { Capsule } from '../types';
 import { NavigationProp } from '@react-navigation/native';
-import { GameProvider, useGame } from '../context/gameContext';
+import { useGame } from '../context/gameContext';
 import { useAR } from '../context/arContext';
 import { Onboarding } from '../components/onboarding';
 
@@ -22,28 +20,36 @@ export default function ARScreen({
 }: {
   navigation: NavigationProp<any>;
 }) {
-  // const [trackingStatus, setTrackingStatus] = useState('initializing');
-  // const [relocalized, setRelocalized] = useState(false);
-  // const [capsules, setCapsules] = useState<null | Capsule[]>(null);
-
   const game = useGame();
-
   const ar = useAR();
 
   if (!game) throw new Error('useGame didnt work');
-  if (!ar) throw new Error('useGame didnt work');
+  if (!ar) throw new Error('useAR didnt work');
 
   const { capsules, selectedCapsule, setSelectedCapsule, openCapsule } = game;
+  const { localizeWorld, trackingStatus, relocalized } = ar;
 
-  const { localizeWorld, trackingStatus } = ar;
-  // Fetch capsules from backend on mount
-  // capsules is in useContext, accesible across all components, cleaner than leaving here.
+  // Start AR session and listen for relocalization
   useEffect(() => {
     const cleanup = localizeWorld();
     return cleanup;
   }, []);
 
-  // sets up a listener so when capsule is tapped, sets selected capsule, and then can be opened
+  // Place capsules in AR once relocalized and data is available
+  useEffect(() => {
+    if (relocalized && capsules.size > 0) {
+      console.log('[ar.tsx] Placing', capsules.size, 'capsules in AR');
+      ARWorldMapModule.placeCapsules(
+        Array.from(capsules.values()).map(c => ({
+          id: c.id,
+          position: c.position,
+          color: '#FFD700',
+        })),
+      );
+    }
+  }, [relocalized, capsules]);
+
+  // Listen for capsule taps from native AR view
   useEffect(() => {
     const tapSub = ARWorldMapModule.onCapsuleTapped(e => {
       if (!capsules) return null;
