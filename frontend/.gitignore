@@ -25,6 +25,9 @@ DerivedData
 *.xcuserstate
 **/.xcode.env.local
 
+ios/Podfile.lock
+*.usdz
+
 # Android/IntelliJ
 #
 build/

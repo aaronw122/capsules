@@ -17,7 +17,7 @@ type NeonLetterBoxProps = {
 
 export const NeonLetterBox = ({
   letter,
-  color = '#0ff',
+  color = '#00ffff',
   index = 0,
 }: NeonLetterBoxProps) => {
   const progress = useSharedValue(letter ? 0 : 1);

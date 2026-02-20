@@ -102,4 +102,14 @@ class ARWorldMapModule: RCTEventEmitter {
             view.placeCapsules(capsules: capsuleArray)
         }
     }
+
+    @objc func markCapsuleOpened(_ capsuleId: String) {
+        DispatchQueue.main.async { [weak self] in
+            guard let self = self, let view = self.arView else {
+                print("[ARWorldMapModule] markCapsuleOpened failed — arView is nil")
+                return
+            }
+            view.markCapsuleOpened(capsuleId)
+        }
+    }
 }
