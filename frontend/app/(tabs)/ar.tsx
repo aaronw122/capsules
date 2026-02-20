@@ -14,7 +14,7 @@ import CapsuleDetail from '../components/CapsuleDetail';
 import Config from 'react-native-config';
 import type { Capsule } from '../types';
 import { NavigationProp } from '@react-navigation/native';
-import { useGame } from '../context/gameContext';
+import { GameProvider, useGame } from '../context/gameContext';
 
 export default function ARScreen({
   navigation,
@@ -29,7 +29,35 @@ export default function ARScreen({
 
   if (!game) throw new Error('useGame didnt work');
 
-  const { capsules, selectedCapsule, setSelectedCapsule } = game;
+  const {
+    capsules,
+    selectedCapsule,
+    setSelectedCapsule,
+    openCapsule,
+    gameState,
+    escapePhrase,
+    leaderBoard,
+  } = game;
+
+  useEffect(() => {
+    console.log('gameState changed: ', gameState);
+
+    const capsule1 = {
+      id: '1',
+      letter: 'F',
+      number: 1,
+      isOpened: false,
+      position: [2, 2, 2],
+      content: {
+        name: 'string',
+        funFact: 'string',
+      },
+    };
+    openCapsule(capsule1);
+    console.log('leaderboard after open capsule: ', leaderBoard);
+    console.log('escapePhrase after open capsule: ', escapePhrase);
+    console.log('selected capsule open status: ', selectedCapsule?.isOpened);
+  }, [gameState]);
 
   // Fetch capsules from backend on mount
   // capsules is in useContext, accesible across all components, cleaner than leaving here.
@@ -61,7 +89,7 @@ export default function ARScreen({
       if (!capsules) return null;
       const capsule = capsules.find(el => el.id === e.capsuleId);
       if (capsule) {
-        setSelectedCapsule(capsule);
+        openCapsule(capsule);
       } else {
         console.warn(
           '[ar.tsx] Tapped capsule not found in backend data:',

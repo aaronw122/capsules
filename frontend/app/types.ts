@@ -2,15 +2,17 @@ export type PlayerState = {
   id: string;
   name: string;
   capsules: number;
-  completedAt: string | null;
   rank: number;
+  capsuleTimestamp: number | null;
+  completedAt: number | null;
 };
 
 export type PlayerLeaderBoard = {
   name: string;
   capsules: number;
-  completedAt: string | null;
   rank: number;
+  capsuleTimestamp: number | null;
+  completedAt: number | null;
 };
 
 export type GameState = 'lobby' | 'playing' | 'gameOver';
@@ -30,6 +32,13 @@ export type GameContext = {
   setCapsules: React.Dispatch<React.SetStateAction<null | Capsule[]>>;
   selectedCapsule: Capsule | null;
   setSelectedCapsule: React.Dispatch<React.SetStateAction<null | Capsule>>;
+  escapePhrase: (string | null)[];
+  setEscapePhrase: React.Dispatch<React.SetStateAction<(string | null)[]>>;
+  gameState: GameState | null;
+  setGameState: React.Dispatch<React.SetStateAction<GameState | null>>;
+  endTime: number;
+  setEndTime: React.Dispatch<React.SetStateAction<number>>;
+  openCapsule: (capsule: Capsule) => void;
 };
 
 export type RootStackParamList = {
@@ -45,6 +54,7 @@ export type Capsule = {
   letter: string;
   number: number;
   isOpened: boolean;
+  position: number[];
   content: {
     name: string;
     funFact: string;

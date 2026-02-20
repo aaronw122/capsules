@@ -14,12 +14,19 @@ export const Login = ({ navigation }: { navigation: NavigationProp<any> }) => {
 
   if (!game) throw new Error('useGame not working');
 
-  const { newName, handleNameChange, createPlayer, setPlayerState } = game;
+  const {
+    newName,
+    handleNameChange,
+    createPlayer,
+    setPlayerState,
+    leaderBoard,
+  } = game;
 
   const joinLobby = async () => {
     const player = await createPlayer();
     setPlayerState(player);
     console.log('player', player);
+    console.log('leaderboard: ', leaderBoard);
 
     // navigates to ar.tsx, player orients themselves
     navigation.navigate('AR');
