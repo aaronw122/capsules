@@ -17,7 +17,8 @@ export function setEndsAt(val: number) {
   endsAt = val;
 } // setter for tests
 
-export let gameDuration: number = 300000; // 5 minutes in ms
+// export let gameDuration: number = 300000; // 5 minutes in ms
+export let gameDuration: number = 60000;
 export function setGameDuration(val: number) {
   gameDuration = val;
 } // setter for tests
@@ -83,7 +84,7 @@ app.post('/game/start', (req, res) => {
 
   // set timer for server to broadcast game over when time runs out
   gameTimer = setTimeout(() => {
-    io.emit('gameOver', 'gameOver'); // broadcast game ended
+    io.emit('gameOver'); // broadcast game ended
     const leaderboardArray = Array.from(leaderboard.values()); // convert leaderboard to an array
     io.emit('leaderboardUpdate', leaderboardArray); // broadcast leaderboard to all clients
   }, gameDuration);
