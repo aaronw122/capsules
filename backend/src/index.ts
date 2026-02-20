@@ -17,8 +17,8 @@ export function setEndsAt(val: number) {
   endsAt = val;
 } // setter for tests
 
-// export let gameDuration: number = 300000; // 5 minutes in ms
-export let gameDuration: number = 300000;
+// export let gameDuration: number = 180000; // 3 minutes in ms
+export let gameDuration: number = 180000;
 export function setGameDuration(val: number) {
   gameDuration = val;
 } // setter for tests
@@ -46,7 +46,11 @@ io.on('connection', (socket) => {
 
       // Check if player won
       if (player.capsules === 17) {
-        player.completedAt = Date.now(); // log their win time
+        const msRemaining = endsAt - Date.now();
+        const totalSeconds = Math.floor(msRemaining / 1000);
+        const minutes = Math.floor(totalSeconds / 60);
+        const seconds = totalSeconds % 60;
+        player.completedAt = `${minutes}:${seconds.toString().padStart(2, '0')}`; // time remaining when they won
       }
 
       const updatedLeaderboard = Array.from(leaderboard.values()); // convert map of players to an array

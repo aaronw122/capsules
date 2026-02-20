@@ -4,14 +4,14 @@ export type PlayerState = {
   capsules: number;
   rank: number;
   capsuleTimestamp: number | null;
-  completedAt: number | null;
+  completedAt: string | null;
 };
 
 export type PlayerLeaderBoard = {
   name: string;
   capsules: number;
   rank: number;
-  completedAt: number | null;
+  completedAt: string | null;
 };
 
 export type GameState = 'lobby' | 'playing' | 'gameOver';
