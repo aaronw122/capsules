@@ -28,6 +28,8 @@ export type GameContext = {
   setLeaderBoard: React.Dispatch<React.SetStateAction<[] | PlayerState[]>>;
   capsules: Capsule[] | null;
   setCapsules: React.Dispatch<React.SetStateAction<null | Capsule[]>>;
+  selectedCapsule: Capsule | null;
+  setSelectedCapsule: React.Dispatch<React.SetStateAction<null | Capsule>>;
 };
 
 export type RootStackParamList = {

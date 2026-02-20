@@ -41,6 +41,7 @@ export function GameProvider({ children }: { children: React.ReactNode }) {
   const [leaderBoard, setLeaderBoard] = useState<[] | LeaderBoard>([]);
   const [gameState, setGameState] = useState<null | GameState>(null);
   const [capsules, setCapsules] = useState<null | Capsule[]>(null);
+  const [selectedCapsule, setSelectedCapsule] = useState<Capsule | null>(null);
 
   const handleNameChange = (text: string) => {
     setNewName(text);
@@ -58,6 +59,9 @@ export function GameProvider({ children }: { children: React.ReactNode }) {
       console.error('[ar.tsx] Failed to fetch capsules:', err);
     }
   };
+
+  //openCapsule function
+  // useEffect with selectedCapsule dep
 
   useEffect(() => {
     setLeaderBoard(mockLeaderBoard);
@@ -105,6 +109,8 @@ export function GameProvider({ children }: { children: React.ReactNode }) {
         setLeaderBoard,
         capsules,
         setCapsules,
+        selectedCapsule,
+        setSelectedCapsule,
       }}
     >
       {children}

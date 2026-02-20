@@ -23,14 +23,13 @@ export default function ARScreen({
 }) {
   const [trackingStatus, setTrackingStatus] = useState('initializing');
   const [relocalized, setRelocalized] = useState(false);
-  const [selectedCapsule, setSelectedCapsule] = useState<Capsule | null>(null);
   // const [capsules, setCapsules] = useState<null | Capsule[]>(null);
 
   const game = useGame();
 
   if (!game) throw new Error('useGame didnt work');
 
-  const { capsules } = game;
+  const { capsules, selectedCapsule, setSelectedCapsule } = game;
 
   // Fetch capsules from backend on mount
   // capsules is in useContext, accesible across all components, cleaner than leaving here.
