@@ -143,11 +143,11 @@ export function GameProvider({ children }: { children: React.ReactNode }) {
       body: JSON.stringify(playerObj),
     });
 
-    if (!response.ok) {
-      throw new Error(`HTTP error: ${response.status}`);
-    }
-
     const data = await response.json();
+
+    if (!response.ok) {
+      throw new Error(data.error || `HTTP error: ${response.status}`);
+    }
 
     return data;
   };

@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import {
   View,
   Text,
@@ -23,12 +23,21 @@ export const Login = ({ navigation }: { navigation: NavigationProp<any> }) => {
     webSocketConnection,
   } = game;
 
+  const [errorMessage, setErrorMessage] = useState<string | null>(null);
+
   const joinLobby = async () => {
-    webSocketConnection();
-    const player = await createPlayer();
-    setPlayerState(player);
-    // navigates to ar.tsx, player orients themselves
-    navigation.navigate('AR');
+    try {
+      setErrorMessage(null);
+      webSocketConnection();
+      const player = await createPlayer();
+      setPlayerState(player);
+      // navigates to ar.tsx, player orients themselves
+      navigation.navigate('AR');
+    } catch (err) {
+      setErrorMessage(
+        err instanceof Error ? err.message : 'Failed to join game',
+      );
+    }
   };
 
   return (
@@ -45,6 +54,7 @@ export const Login = ({ navigation }: { navigation: NavigationProp<any> }) => {
           autoCorrect={false}
         />
       </View>
+      {errorMessage && <Text style={styles.errorText}>{errorMessage}</Text>}
       <TouchableOpacity
         style={[styles.button, !newName.trim() && styles.buttonDisabled]}
         onPress={() => newName.trim() && joinLobby()}
@@ -105,5 +115,12 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
     color: '#0a0a1a',
     letterSpacing: 2,
+  },
+  errorText: {
+    fontFamily: 'monospace',
+    fontSize: 12,
+    color: '#ff4444',
+    marginTop: 12,
+    letterSpacing: 1,
   },
 });

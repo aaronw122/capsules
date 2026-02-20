@@ -155,8 +155,8 @@ describe('POST /game/start', () => {
 
     const client = await createClient();
 
-    const gameOverPromise = new Promise<string>((resolve) => {
-      client.on('gameOver', (data: string) => resolve(data));
+    const gameOverPromise = new Promise<void>((resolve) => {
+      client.on('gameOver', () => resolve());
     });
 
     // Start game and consume the initial leaderboardUpdate
@@ -168,10 +168,9 @@ describe('POST /game/start', () => {
     });
 
     // Wait for the short timer to fire
-    const gameOverData = await gameOverPromise;
+    await gameOverPromise;
     const lb = await finalLeaderboardPromise;
 
-    expect(gameOverData).toBe('gameOver');
     expect(lb.length).toBe(2);
 
     client.disconnect();

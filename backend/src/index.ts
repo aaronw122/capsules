@@ -105,6 +105,12 @@ app.get('/capsules', (req, res) => {
 app.post('/add/player', (req, res) => {
   const body = req.body; // parse request for its body object
 
+  // Check if name sent is an acceptable username
+  if (!body.name || typeof body.name !== 'string') {
+    res.status(400).json({ error: 'Name must be a non-empty string' });
+    return;
+  }
+
   // need to update player w UUID:
   const newPlayer = {
     id: crypto.randomUUID(),
