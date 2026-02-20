@@ -101,6 +101,7 @@ export function GameProvider({ children }: { children: React.ReactNode }) {
 
     // listens for server emit of game start after curl request
     websocket.current.on('gameStart', (data: number) => {
+      console.log('gameStart received!');
       setGameState('playing');
       setEndTime(data); // data = endsAt value
     });

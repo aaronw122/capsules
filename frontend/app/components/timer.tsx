@@ -51,7 +51,9 @@ export const Timer = () => {
 
 const styles = StyleSheet.create({
   timerContainer: {
-    alignItems: 'center',
+    justifyContent: 'flex-start',
+    alignSelf: 'flex-end',
+    flexShrink: 0,
   },
   timer: {
     fontFamily: 'monospace',
