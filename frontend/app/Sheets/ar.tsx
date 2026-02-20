@@ -54,10 +54,10 @@ export default function ARScreen({
 
   // Place capsules in AR once relocalized and data is available
   useEffect(() => {
-    if (relocalized && capsules) {
-      console.log('[ar.tsx] Placing', capsules.length, 'capsules in AR');
+    if (relocalized && capsules.size > 0) {
+      console.log('[ar.tsx] Placing', capsules.size, 'capsules in AR');
       ARWorldMapModule.placeCapsules(
-        capsules.map(c => ({
+        Array.from(capsules.values()).map(c => ({
           id: c.id,
           position: c.position,
           color: '#FFD700',
