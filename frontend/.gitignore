@@ -27,7 +27,6 @@ DerivedData
 ios/Podfile.lock
 
 ios/Podfile.lock
-*.usdz
 
 # Android/IntelliJ
 #

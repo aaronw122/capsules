@@ -44,13 +44,13 @@ export function ARProvider({ children }: { children: React.ReactNode }) {
   //websockets will receive updated leaderboard from server. add mock data for now.
 
   const localizeWorld = () => {
-    const viewReadySub = ARWorldMapModule.onViewReady(() => {
-      console.log('[ar.tsx] Native view ready, loading world map');
-      ARWorldMapModule.startSessionFromBundle('arworldmap.data');
-    });
+    // Call directly — the native module queues the command if the
+    // view isn't ready yet and replays it once the view is linked.
+    console.log('[arContext] Starting AR session from bundle');
+    ARWorldMapModule.startSessionFromBundle('arworldmap.data');
 
     const relocalSub = ARWorldMapModule.onRelocalized(() => {
-      console.log('[ar.tsx] Relocalized');
+      console.log('[arContext] Relocalized');
       setRelocalized(true);
     });
 
@@ -59,7 +59,6 @@ export function ARProvider({ children }: { children: React.ReactNode }) {
     });
 
     return () => {
-      viewReadySub.remove();
       relocalSub.remove();
       trackingSub.remove();
     };

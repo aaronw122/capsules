@@ -61,12 +61,7 @@ class ARWorldMapModule: RCTEventEmitter {
     }
 
     @objc func startSession(_ worldMapBase64: String) {
-        DispatchQueue.main.async { [weak self] in
-            guard let self = self, let view = self.arView else {
-                print("[ARWorldMapModule] startSession failed — arView is nil")
-                return
-            }
-
+        runOnView { view in
             if worldMapBase64.isEmpty {
                 view.startSession()
             } else {
@@ -80,12 +75,7 @@ class ARWorldMapModule: RCTEventEmitter {
     }
 
     @objc func startSessionFromBundle(_ filename: String) {
-        DispatchQueue.main.async { [weak self] in
-            guard let self = self, let view = self.arView else {
-                print("[ARWorldMapModule] startSessionFromBundle failed — arView is nil")
-                return
-            }
-
+        runOnView { view in
             guard let url = Bundle.main.url(forResource: filename, withExtension: nil),
                   let data = try? Data(contentsOf: url) else {
                 print("[ARWorldMapModule] No bundled world map '\(filename)' found, starting without map")
@@ -98,11 +88,7 @@ class ARWorldMapModule: RCTEventEmitter {
     }
 
     @objc func placeCapsules(_ capsules: NSArray) {
-        DispatchQueue.main.async { [weak self] in
-            guard let self = self, let view = self.arView else {
-                print("[ARWorldMapModule] placeCapsules failed — arView is nil")
-                return
-            }
+        runOnView { view in
             guard let capsuleArray = capsules as? [[String: Any]] else {
                 print("[ARWorldMapModule] placeCapsules failed — invalid capsule array format")
                 return
@@ -112,12 +98,25 @@ class ARWorldMapModule: RCTEventEmitter {
     }
 
     @objc func markCapsuleOpened(_ capsuleId: String) {
-        DispatchQueue.main.async { [weak self] in
-            guard let self = self, let view = self.arView else {
-                print("[ARWorldMapModule] markCapsuleOpened failed — arView is nil")
-                return
-            }
+        runOnView { view in
             view.markCapsuleOpened(capsuleId)
+        }
+    }
+
+    /// Runs a block on the main queue with the AR view. If the view isn't
+    /// linked yet, the block is queued and replayed when setARView is called.
+    private func runOnView(_ block: @escaping (ARWorldMapView) -> Void) {
+        DispatchQueue.main.async { [weak self] in
+            guard let self = self else { return }
+            if let view = self.arView {
+                block(view)
+            } else {
+                print("[ARWorldMapModule] View not ready, queuing command")
+                self.pendingCommands.append { [weak self] in
+                    guard let view = self?.arView else { return }
+                    block(view)
+                }
+            }
         }
     }
 }

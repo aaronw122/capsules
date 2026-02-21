@@ -73,7 +73,8 @@ class ARWorldMapView: ARSCNView, ARSCNViewDelegate, ARSessionDelegate {
     func loadWorldMap(data: Data) {
         do {
             guard let worldMap = try NSKeyedUnarchiver.unarchivedObject(ofClass: ARWorldMap.self, from: data) else {
-                print("[ARWorldMapView] Failed to decode world map")
+                print("[ARWorldMapView] Failed to decode world map, starting without map")
+                startSession()
                 return
             }
 
@@ -88,7 +89,8 @@ class ARWorldMapView: ARSCNView, ARSCNViewDelegate, ARSessionDelegate {
             self.session.run(config, options: [.resetTracking, .removeExistingAnchors])
             isRelocalized = false
         } catch {
-            print("[ARWorldMapView] Load world map error: \(error.localizedDescription)")
+            print("[ARWorldMapView] Load world map error: \(error.localizedDescription), starting without map")
+            startSession()
         }
     }
 
