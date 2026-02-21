@@ -8,6 +8,7 @@
 import React from 'react';
 import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
 import { NavigationProp } from '@react-navigation/native';
+import { HologramProjector } from '../components/hologramProjector';
 
 export default function Onboarding({
   navigation,
@@ -16,6 +17,7 @@ export default function Onboarding({
 }) {
   return (
     <View style={styles.container}>
+      <HologramProjector />
       <Text style={styles.yearLabel}>AD 2126</Text>
       <Text style={styles.title}>FRACTAL U</Text>
       <View style={styles.divider} />
