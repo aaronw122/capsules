@@ -26,9 +26,18 @@ class ARWorldMapView: ARSCNView, ARSCNViewDelegate, ARSessionDelegate {
     private var openedCapsuleIDs: Set<String> = []
 
     private lazy var capsuleModelTemplate: SCNNode? = {
-        guard let url = Bundle.main.url(forResource: "toy_drummer", withExtension: "usdz"),
+        guard let url = Bundle.main.url(forResource: "capsule_pin_glow", withExtension: "usdz"),
               let scene = try? SCNScene(url: url, options: nil) else {
-            print("[ARWorldMapView] Failed to load toy_drummer.usdz")
+            print("[ARWorldMapView] Failed to load capsule_pin_glow.usdz")
+            return nil
+        }
+        return scene.rootNode
+    }()
+
+    private lazy var openedModelTemplate: SCNNode? = {
+        guard let url = Bundle.main.url(forResource: "capsule_pin_opened", withExtension: "usdz"),
+              let scene = try? SCNScene(url: url, options: nil) else {
+            print("[ARWorldMapView] Failed to load capsule_pin_opened.usdz")
             return nil
         }
         return scene.rootNode
@@ -186,43 +195,54 @@ class ARWorldMapView: ARSCNView, ARSCNViewDelegate, ARSessionDelegate {
         let isOpened = openedCapsuleIDs.contains(name)
 
         if isOpened {
-            print("[ARWorldMapView] Rendering opened capsule (sphere) for: \(name)")
-            addSphereNode(to: node, name: name)
+            print("[ARWorldMapView] Rendering opened capsule for: \(name)")
+            addOpenedNode(to: node, name: name)
         } else {
             print("[ARWorldMapView] Rendering unopened capsule (USDZ) for: \(name)")
             addUSDZNode(to: node, name: name)
         }
     }
 
-    private func addSphereNode(to node: SCNNode, name: String) {
-        let color = capsuleColors[name] ?? .systemYellow
-
-        let sphere = SCNSphere(radius: 0.05)
-        sphere.firstMaterial?.diffuse.contents = color
-        sphere.firstMaterial?.lightingModel = .physicallyBased
-
-        let sphereNode = SCNNode(geometry: sphere)
-        sphereNode.name = name
-        node.addChildNode(sphereNode)
-
-        let hover = SCNAction.sequence([
-            SCNAction.moveBy(x: 0, y: 0.02, z: 0, duration: 1.0),
-            SCNAction.moveBy(x: 0, y: -0.02, z: 0, duration: 1.0)
-        ])
-        sphereNode.runAction(SCNAction.repeatForever(hover))
-    }
-
-    private func addUSDZNode(to node: SCNNode, name: String) {
-        guard let template = capsuleModelTemplate else {
-            print("[ARWorldMapView] USDZ template unavailable, falling back to sphere for: \(name)")
-            addSphereNode(to: node, name: name)
+    private func addOpenedNode(to node: SCNNode, name: String) {
+        guard let template = openedModelTemplate else {
+            print("[ARWorldMapView] Opened USDZ template unavailable, falling back to sphere for: \(name)")
+            // Fallback to simple sphere if USDZ missing
+            let sphere = SCNSphere(radius: 0.05)
+            sphere.firstMaterial?.diffuse.contents = capsuleColors[name] ?? .systemYellow
+            sphere.firstMaterial?.lightingModel = .physicallyBased
+            let sphereNode = SCNNode(geometry: sphere)
+            sphereNode.name = name
+            node.addChildNode(sphereNode)
             return
         }
 
         let modelNode = template.clone()
         modelNode.name = name
-        // CONFIGURABLE: Scale to ~10-15cm. Adjust if the model looks too big/small.
-        modelNode.scale = SCNVector3(0.03, 0.03, 0.03)
+        modelNode.scale = SCNVector3(0.29, 0.29, 0.29)
+        node.addChildNode(modelNode)
+
+        let hover = SCNAction.sequence([
+            SCNAction.moveBy(x: 0, y: 0.02, z: 0, duration: 1.0),
+            SCNAction.moveBy(x: 0, y: -0.02, z: 0, duration: 1.0)
+        ])
+        modelNode.runAction(SCNAction.repeatForever(hover))
+    }
+
+    private func addUSDZNode(to node: SCNNode, name: String) {
+        guard let template = capsuleModelTemplate else {
+            print("[ARWorldMapView] USDZ template unavailable, falling back to sphere for: \(name)")
+            let sphere = SCNSphere(radius: 0.05)
+            sphere.firstMaterial?.diffuse.contents = capsuleColors[name] ?? .systemYellow
+            sphere.firstMaterial?.lightingModel = .physicallyBased
+            let sphereNode = SCNNode(geometry: sphere)
+            sphereNode.name = name
+            node.addChildNode(sphereNode)
+            return
+        }
+
+        let modelNode = template.clone()
+        modelNode.name = name
+        modelNode.scale = SCNVector3(0.25, 0.25, 0.25)
         node.addChildNode(modelNode)
 
         let hover = SCNAction.sequence([
@@ -235,17 +255,15 @@ class ARWorldMapView: ARSCNView, ARSCNViewDelegate, ARSessionDelegate {
     func markCapsuleOpened(_ capsuleId: String) {
         openedCapsuleIDs.insert(capsuleId)
 
-        // Find the node for this capsule and swap USDZ → sphere
+        // Find the node for this capsule and swap unopened → opened model
         guard let frame = self.session.currentFrame else { return }
         for anchor in frame.anchors {
             guard anchor.name == capsuleId else { continue }
-            // Walk scene graph to find the anchor's node
             self.scene.rootNode.enumerateChildNodes { node, stop in
-                // Anchor nodes contain a child named with the capsuleId
                 if node.name == capsuleId {
                     guard let parentNode = node.parent else { return }
                     node.removeFromParentNode()
-                    self.addSphereNode(to: parentNode, name: capsuleId)
+                    self.addOpenedNode(to: parentNode, name: capsuleId)
                     stop.pointee = true
                 }
             }
