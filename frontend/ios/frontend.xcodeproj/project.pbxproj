@@ -17,7 +17,9 @@
 		A2B8AC5E2F4679C700842B19 /* ARWorldMapViewManager.m in Sources */ = {isa = PBXBuildFile; fileRef = A2B8AC572F4679C700842B19 /* ARWorldMapViewManager.m */; };
 		A2B8AC5F2F4679C700842B19 /* ARWorldMapView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2B8AC562F4679C700842B19 /* ARWorldMapView.swift */; };
 		A2B8AC6F2F47C75D00842B19 /* arworldmap.data in Resources */ = {isa = PBXBuildFile; fileRef = A2B8AC6E2F47C75D00842B19 /* arworldmap.data */; };
-		A2B8AC702F47C75D00842B19 /* toy_drummer.usdz in Resources */ = {isa = PBXBuildFile; fileRef = A2B8AC712F47C75D00842B19 /* toy_drummer.usdz */; };
+		A2B8AC702F47C75D00842B19 /* capsule_pin.usdz in Resources */ = {isa = PBXBuildFile; fileRef = A2B8AC712F47C75D00842B19 /* capsule_pin.usdz */; };
+		A2B8AC722F47C75D00842B19 /* capsule_pin_opened.usdz in Resources */ = {isa = PBXBuildFile; fileRef = A2B8AC732F47C75D00842B19 /* capsule_pin_opened.usdz */; };
+		A2B8AC742F47C75D00842B19 /* capsule_pin_glow.usdz in Resources */ = {isa = PBXBuildFile; fileRef = A2B8AC752F47C75D00842B19 /* capsule_pin_glow.usdz */; };
 		B8252A824AF9631E8930E597 /* libPods-frontend.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 2541788160FF8675703992AF /* libPods-frontend.a */; };
 /* End PBXBuildFile section */
 
@@ -37,7 +39,9 @@
 		A2B8AC582F4679C700842B19 /* ARWorldMapViewManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ARWorldMapViewManager.swift; sourceTree = "<group>"; };
 		A2B8AC592F4679C700842B19 /* CapsuleAR-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "CapsuleAR-Bridging-Header.h"; sourceTree = "<group>"; };
 		A2B8AC6E2F47C75D00842B19 /* arworldmap.data */ = {isa = PBXFileReference; lastKnownFileType = file.bplist; path = arworldmap.data; sourceTree = "<group>"; };
-		A2B8AC712F47C75D00842B19 /* toy_drummer.usdz */ = {isa = PBXFileReference; lastKnownFileType = file.usdz; path = toy_drummer.usdz; sourceTree = "<group>"; };
+		A2B8AC712F47C75D00842B19 /* capsule_pin.usdz */ = {isa = PBXFileReference; lastKnownFileType = file.usdz; path = capsule_pin.usdz; sourceTree = "<group>"; };
+		A2B8AC732F47C75D00842B19 /* capsule_pin_opened.usdz */ = {isa = PBXFileReference; lastKnownFileType = file.usdz; path = capsule_pin_opened.usdz; sourceTree = "<group>"; };
+		A2B8AC752F47C75D00842B19 /* capsule_pin_glow.usdz */ = {isa = PBXFileReference; lastKnownFileType = file.usdz; path = capsule_pin_glow.usdz; sourceTree = "<group>"; };
 		A7CF42A78A11FE9857D362E6 /* Pods-frontend.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-frontend.debug.xcconfig"; path = "Target Support Files/Pods-frontend/Pods-frontend.debug.xcconfig"; sourceTree = "<group>"; };
 		ED297162215061F000B7C4FE /* JavaScriptCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = JavaScriptCore.framework; path = System/Library/Frameworks/JavaScriptCore.framework; sourceTree = SDKROOT; };
 /* End PBXFileReference section */
@@ -58,7 +62,9 @@
 			isa = PBXGroup;
 			children = (
 				A2B8AC6E2F47C75D00842B19 /* arworldmap.data */,
-				A2B8AC712F47C75D00842B19 /* toy_drummer.usdz */,
+				A2B8AC712F47C75D00842B19 /* capsule_pin.usdz */,
+				A2B8AC732F47C75D00842B19 /* capsule_pin_opened.usdz */,
+				A2B8AC752F47C75D00842B19 /* capsule_pin_glow.usdz */,
 				A2B8AC5A2F4679C700842B19 /* CapsuleAR */,
 				13B07FB51A68108700A75B9A /* Images.xcassets */,
 				761780EC2CA45674006654EE /* AppDelegate.swift */,
@@ -190,7 +196,9 @@
 			buildActionMask = 2147483647;
 			files = (
 				A2B8AC6F2F47C75D00842B19 /* arworldmap.data in Resources */,
-				A2B8AC702F47C75D00842B19 /* toy_drummer.usdz in Resources */,
+				A2B8AC702F47C75D00842B19 /* capsule_pin.usdz in Resources */,
+				A2B8AC722F47C75D00842B19 /* capsule_pin_opened.usdz in Resources */,
+				A2B8AC742F47C75D00842B19 /* capsule_pin_glow.usdz in Resources */,
 				81AB9BB82411601600AC10FF /* LaunchScreen.storyboard in Resources */,
 				13B07FBF1A68108700A75B9A /* Images.xcassets in Resources */,
 				9D0EEFA08D56AEDA97B4F035 /* PrivacyInfo.xcprivacy in Resources */,
@@ -307,7 +315,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 1.0;
+				MARKETING_VERSION = 2.0;
 				OTHER_LDFLAGS = (
 					"$(inherited)",
 					"-ObjC",
@@ -343,7 +351,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 1.0;
+				MARKETING_VERSION = 2.0;
 				OTHER_LDFLAGS = (
 					"$(inherited)",
 					"-ObjC",
