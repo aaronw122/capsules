@@ -18,6 +18,7 @@ import React
 class ARWorldMapModule: RCTEventEmitter {
 
     private var arView: ARWorldMapView?
+    private var pendingCommands: [() -> Void] = []
 
     override static func moduleName() -> String! {
         return "ARWorldMapModule"
@@ -28,10 +29,12 @@ class ARWorldMapModule: RCTEventEmitter {
     }
 
     override func supportedEvents() -> [String]! {
-        return ["onCapsuleTapped", "onRelocalized", "onTrackingStateChanged", "onViewReady"]
+        return ["onCapsuleTapped", "onRelocalized", "onTrackingStateChanged"]
     }
 
-    // Called by ARWorldMapViewManager to link the view
+    // Called by ARWorldMapViewManager to link the view.
+    // If JS already called methods before the view was ready,
+    // they'll be queued in pendingCommands and replayed now.
     func setARView(_ view: ARWorldMapView) {
         self.arView = view
         print("[ARWorldMapModule] AR view linked")
@@ -48,8 +51,13 @@ class ARWorldMapModule: RCTEventEmitter {
             self?.sendEvent(withName: "onTrackingStateChanged", body: ["status": status])
         }
 
-        // Notify JS that the native view is ready to receive commands
-        self.sendEvent(withName: "onViewReady", body: nil)
+        // Replay any commands that arrived before the view was ready
+        let commands = pendingCommands
+        pendingCommands.removeAll()
+        for command in commands {
+            print("[ARWorldMapModule] Replaying queued command")
+            command()
+        }
     }
 
     @objc func startSession(_ worldMapBase64: String) {
