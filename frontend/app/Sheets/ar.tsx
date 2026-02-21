@@ -2,7 +2,7 @@
 // AR screen — loads a world map from the app bundle, waits for relocalization,
 // then places capsules at positions from positions.json.
 //
-// Flow: onViewReady → startSessionFromBundle('arworldmap.data') → ARKit relocalizes →
+// Flow: startSessionFromBundle('arworldmap.data') (queued if view not ready) → ARKit relocalizes →
 //       placeCapsules() → renderer renders spheres → tap fires JS event
 
 import React, { useEffect, useState, useRef } from 'react';
