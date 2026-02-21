@@ -29,7 +29,7 @@ class ARWorldMapModule: RCTEventEmitter {
     }
 
     override func supportedEvents() -> [String]! {
-        return ["onCapsuleTapped", "onRelocalized", "onTrackingStateChanged"]
+        return ["onCapsuleTapped", "onRelocalized", "onTrackingStateChanged", "onCameraPermissionDenied"]
     }
 
     // Called by ARWorldMapViewManager to link the view.
@@ -49,6 +49,10 @@ class ARWorldMapModule: RCTEventEmitter {
 
         view.onTrackingStateChanged = { [weak self] status in
             self?.sendEvent(withName: "onTrackingStateChanged", body: ["status": status])
+        }
+
+        view.onCameraPermissionDenied = { [weak self] in
+            self?.sendEvent(withName: "onCameraPermissionDenied", body: nil)
         }
 
         // Replay any commands that arrived before the view was ready

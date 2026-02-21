@@ -6,7 +6,7 @@
 //       placeCapsules() → renderer renders spheres → tap fires JS event
 
 import React, { useEffect, useState, useRef } from 'react';
-import { View, Text, StyleSheet, Button } from 'react-native';
+import { View, Text, StyleSheet, Button, Linking } from 'react-native';
 import { ARWorldMapView } from '../native/ARWorldMapView';
 import ARWorldMapModule from '../native/ARWorldMapModule';
 import CapsuleDetail from '../components/CapsuleDetail';
@@ -42,7 +42,8 @@ export default function ARScreen({
     winCompletedAt,
     triggerLocalGameOver,
   } = game;
-  const { localizeWorld, trackingStatus, relocalized } = ar;
+  const { localizeWorld, trackingStatus, relocalized, cameraPermissionDenied } =
+    ar;
 
   // Countdown state and refs
   const [showCountdown, setShowCountdown] = useState(false);
@@ -113,6 +114,18 @@ export default function ARScreen({
     return () => tapSub.remove();
   }, [capsules]);
 
+  if (cameraPermissionDenied) {
+    return (
+      <View style={styles.permissionContainer}>
+        <Text style={styles.permissionTitle}>Camera Access Required</Text>
+        <Text style={styles.permissionText}>
+          This app needs camera access for AR. Please enable it in Settings.
+        </Text>
+        <Button title="Open Settings" onPress={() => Linking.openSettings()} />
+      </View>
+    );
+  }
+
   return (
     <View style={styles.container}>
       <ARWorldMapView style={styles.arView} />
@@ -173,5 +186,24 @@ const styles = StyleSheet.create({
     color: '#fff',
     fontFamily: 'monospace',
     fontSize: 14,
+  },
+  permissionContainer: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    backgroundColor: '#0a0a1a',
+    padding: 32,
+  },
+  permissionTitle: {
+    color: '#fff',
+    fontSize: 20,
+    fontWeight: 'bold',
+    marginBottom: 12,
+  },
+  permissionText: {
+    color: '#aaa',
+    fontSize: 16,
+    textAlign: 'center',
+    marginBottom: 24,
   },
 });

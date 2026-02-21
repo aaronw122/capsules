@@ -46,4 +46,7 @@ export default {
 
   onTrackingStateChanged: (cb: (e: { status: string }) => void) =>
     emitter.addListener('onTrackingStateChanged', cb),
+
+  onCameraPermissionDenied: (cb: () => void) =>
+    emitter.addListener('onCameraPermissionDenied', cb),
 };

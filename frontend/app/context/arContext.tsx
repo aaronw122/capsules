@@ -40,8 +40,7 @@ export const useAR = () => {
 export function ARProvider({ children }: { children: React.ReactNode }) {
   const [relocalized, setRelocalized] = useState(false);
   const [trackingStatus, setTrackingStatus] = useState('initializing');
-
-  //websockets will receive updated leaderboard from server. add mock data for now.
+  const [cameraPermissionDenied, setCameraPermissionDenied] = useState(false);
 
   const localizeWorld = () => {
     // Call directly — the native module queues the command if the
@@ -58,9 +57,15 @@ export function ARProvider({ children }: { children: React.ReactNode }) {
       setTrackingStatus(e.status);
     });
 
+    const cameraSub = ARWorldMapModule.onCameraPermissionDenied(() => {
+      console.warn('[arContext] Camera permission denied');
+      setCameraPermissionDenied(true);
+    });
+
     return () => {
       relocalSub.remove();
       trackingSub.remove();
+      cameraSub.remove();
     };
   };
 
@@ -70,6 +75,7 @@ export function ARProvider({ children }: { children: React.ReactNode }) {
         relocalized,
         setRelocalized,
         trackingStatus,
+        cameraPermissionDenied,
         localizeWorld,
       }}
     >

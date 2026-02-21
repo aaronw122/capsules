@@ -14,6 +14,7 @@
 //
 
 import ARKit
+import AVFoundation
 import SceneKit
 import UIKit
 
@@ -24,6 +25,7 @@ class ARWorldMapView: ARSCNView, ARSCNViewDelegate, ARSessionDelegate {
     private var capsulesEnabled = false
     private var pendingAnchors: [(SCNNode, ARAnchor)] = []
     private var openedCapsuleIDs: Set<String> = []
+    var onCameraPermissionDenied: (() -> Void)?
 
     private lazy var capsuleModelTemplate: SCNNode? = {
         guard let url = Bundle.main.url(forResource: "capsule_pin_glow", withExtension: "usdz"),
@@ -63,34 +65,63 @@ class ARWorldMapView: ARSCNView, ARSCNViewDelegate, ARSessionDelegate {
 
     // Session
 
+    /// Checks camera permission before running the given block.
+    /// Requests access if not yet determined, or fires onCameraPermissionDenied if denied.
+    private func requireCamera(_ block: @escaping () -> Void) {
+        switch AVCaptureDevice.authorizationStatus(for: .video) {
+        case .authorized:
+            block()
+        case .notDetermined:
+            AVCaptureDevice.requestAccess(for: .video) { [weak self] granted in
+                DispatchQueue.main.async {
+                    if granted {
+                        block()
+                    } else {
+                        print("[ARWorldMapView] Camera permission denied by user")
+                        self?.onCameraPermissionDenied?()
+                    }
+                }
+            }
+        default:
+            print("[ARWorldMapView] Camera permission denied/restricted")
+            onCameraPermissionDenied?()
+        }
+    }
+
     func startSession() {
-        let config = ARWorldTrackingConfiguration()
-        config.planeDetection = [.horizontal, .vertical]
-        self.session.run(config, options: [.resetTracking, .removeExistingAnchors])
-        isRelocalized = false
+        requireCamera { [weak self] in
+            guard let self = self else { return }
+            let config = ARWorldTrackingConfiguration()
+            config.planeDetection = [.horizontal, .vertical]
+            self.session.run(config, options: [.resetTracking, .removeExistingAnchors])
+            self.isRelocalized = false
+        }
     }
 
     func loadWorldMap(data: Data) {
-        do {
-            guard let worldMap = try NSKeyedUnarchiver.unarchivedObject(ofClass: ARWorldMap.self, from: data) else {
-                print("[ARWorldMapView] Failed to decode world map, starting without map")
-                startSession()
-                return
+        requireCamera { [weak self] in
+            guard let self = self else { return }
+            do {
+                guard let worldMap = try NSKeyedUnarchiver.unarchivedObject(ofClass: ARWorldMap.self, from: data) else {
+                    print("[ARWorldMapView] Failed to decode world map, starting without map")
+                    self.startSession()
+                    return
+                }
+
+                print("[ARWorldMapView] World map loaded with \(worldMap.anchors.count) anchor(s)")
+
+                let config = ARWorldTrackingConfiguration()
+                config.planeDetection = [.horizontal, .vertical]
+                config.initialWorldMap = worldMap
+
+                // .removeExistingAnchors clears anchors from the current session, then
+                // ARKit loads the world map's anchors fresh — triggering didAdd for each.
+                self.session.run(config, options: [.resetTracking, .removeExistingAnchors])
+                self.isRelocalized = false
+            } catch {
+                print("[ARWorldMapView] Load world map error: \(error.localizedDescription), starting without map")
+                self.startSession()
             }
-
-            print("[ARWorldMapView] World map loaded with \(worldMap.anchors.count) anchor(s)")
-
-            let config = ARWorldTrackingConfiguration()
-            config.planeDetection = [.horizontal, .vertical]
-            config.initialWorldMap = worldMap
-
-            // .removeExistingAnchors clears anchors from the current session, then
-            // ARKit loads the world map's anchors fresh — triggering didAdd for each.
-            self.session.run(config, options: [.resetTracking, .removeExistingAnchors])
-            isRelocalized = false
-        } catch {
-            print("[ARWorldMapView] Load world map error: \(error.localizedDescription), starting without map")
-            startSession()
         }
     }
 

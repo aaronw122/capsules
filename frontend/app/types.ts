@@ -48,6 +48,7 @@ export type ArContext = {
   relocalized: boolean;
   setRelocalized: React.Dispatch<React.SetStateAction<boolean>>;
   trackingStatus: string;
+  cameraPermissionDenied: boolean;
   localizeWorld: () => void;
 };
 
