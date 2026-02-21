@@ -16,6 +16,7 @@ import { useAR } from '../context/arContext';
 import { Onboarding } from '../components/onboarding';
 import { Hud } from '../components/hud';
 import Countdown from '../components/Countdown';
+import GameEndOverlay from '../components/GameEndOverlay';
 
 export default function ARScreen({
   navigation,
@@ -37,6 +38,9 @@ export default function ARScreen({
     setSelectedCapsule,
     openCapsule,
     gameState,
+    endResult,
+    winCompletedAt,
+    triggerLocalGameOver,
   } = game;
   const { localizeWorld, trackingStatus, relocalized } = ar;
 
@@ -44,6 +48,16 @@ export default function ARScreen({
   const [showCountdown, setShowCountdown] = useState(false);
   const showCountdownRef = useRef(false);
   const countdownShownRef = useRef(gameState === 'playing');
+  const endResultRef = useRef(endResult);
+
+  // Sync endResultRef with endResult state
+  useEffect(() => {
+    endResultRef.current = endResult;
+  }, [endResult]);
+
+  const goToLeaderboard = () => {
+    navigation.reset({ index: 0, routes: [{ name: 'LeaderBoard' }] });
+  };
 
   // Start AR session and listen for relocalization
   useEffect(() => {
@@ -51,15 +65,12 @@ export default function ARScreen({
     return cleanup;
   }, []);
 
-  // Trigger countdown when game starts, navigate to leaderboard on game over
+  // Trigger countdown when game starts
   useEffect(() => {
     if (gameState === 'playing' && !countdownShownRef.current) {
       setShowCountdown(true);
       showCountdownRef.current = true;
       countdownShownRef.current = true;
-    }
-    if (gameState === 'gameOver') {
-      navigation.navigate('LeaderBoard');
     }
   }, [gameState]);
 
@@ -81,7 +92,12 @@ export default function ARScreen({
   // Listen for capsule taps from native AR view
   useEffect(() => {
     const tapSub = ARWorldMapModule.onCapsuleTapped(e => {
-      if (!capsules || showCountdownRef.current) return null;
+      if (
+        !capsules ||
+        showCountdownRef.current ||
+        endResultRef.current !== null
+      )
+        return;
       const capsule = capsules.get(e.capsuleId);
       if (capsule) {
         openCapsule(capsule);
@@ -110,7 +126,12 @@ export default function ARScreen({
       )}
       <View style={styles.overlay}>
         <Text style={styles.statusText}>Tracking: {trackingStatus}</Text>
-        {gameState === 'playing' ? <Hud /> : <Onboarding />}
+        {endResult === null &&
+          (gameState === 'playing' ? (
+            <Hud onTimeUp={triggerLocalGameOver} />
+          ) : (
+            <Onboarding />
+          ))}
       </View>
       {selectedCapsule && (
         <CapsuleDetail
@@ -119,6 +140,13 @@ export default function ARScreen({
             setSelectedCapsule(null);
           }}
           onDismiss={() => setSelectedCapsule(null)}
+        />
+      )}
+      {endResult !== null && (
+        <GameEndOverlay
+          type={endResult}
+          completedAt={winCompletedAt}
+          onViewLeaderboard={goToLeaderboard}
         />
       )}
     </View>

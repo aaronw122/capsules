@@ -1,8 +1,12 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { View, Text, StyleSheet } from 'react-native';
 import { useGame } from '../context/gameContext';
 
-export const Timer = () => {
+type TimerProps = {
+  onTimeUp?: () => void;
+};
+
+export const Timer = ({ onTimeUp }: TimerProps) => {
   const game = useGame();
   if (!game) throw new Error('useGame not working');
 
@@ -10,9 +14,11 @@ export const Timer = () => {
 
   const [minutesLeft, setMinutesLeft] = useState<number>(0);
   const [secondsLeft, setSecondsLeft] = useState<number>(0);
+  const timeUpFiredRef = useRef(false);
 
   useEffect(() => {
     if (endTime === 0) return; // no game yet
+    timeUpFiredRef.current = false;
 
     // set initial values immediately so there's no 1-second flash of 0:00
     const initialRemaining = endTime - Date.now();
@@ -29,6 +35,10 @@ export const Timer = () => {
         setMinutesLeft(0);
         setSecondsLeft(0);
         clearInterval(intervalId);
+        if (!timeUpFiredRef.current) {
+          timeUpFiredRef.current = true;
+          onTimeUp?.();
+        }
         return;
       }
 

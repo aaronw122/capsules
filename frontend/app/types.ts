@@ -37,6 +37,9 @@ export type GameContext = {
   setGameState: React.Dispatch<React.SetStateAction<GameState | null>>;
   endTime: number;
   setEndTime: React.Dispatch<React.SetStateAction<number>>;
+  endResult: 'win' | 'lose' | null;
+  winCompletedAt: string | null;
+  triggerLocalGameOver: () => void;
   openCapsule: (capsule: Capsule) => void;
   webSocketConnection: () => void;
 };

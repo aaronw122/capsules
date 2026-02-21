@@ -2,10 +2,14 @@ import { Phrase } from './escapePhrase';
 import { Timer } from './timer';
 import { View, StyleSheet } from 'react-native';
 
-export const Hud = () => {
+type HudProps = {
+  onTimeUp?: () => void;
+};
+
+export const Hud = ({ onTimeUp }: HudProps) => {
   return (
     <View style={styles.container}>
-      <Timer />
+      <Timer onTimeUp={onTimeUp} />
       <Phrase />
     </View>
   );
