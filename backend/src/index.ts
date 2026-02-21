@@ -130,6 +130,12 @@ app.post('/add/player', (req, res) => {
   res.json(newPlayer); // return initial player state to client
 });
 
+app.post('/reset', (req, res) => {
+  console.log('leaderboard', leaderboard);
+  leaderboard.clear();
+  res.status(200).json({ message: 'leaderboard cleared', leaderboard });
+});
+
 const PORT = 3000;
 if (process.env.NODE_ENV !== 'test') {
   httpServer.listen(PORT, () => {
