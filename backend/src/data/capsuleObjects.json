@@ -1,8 +1,8 @@
 [
   {
     "id": "E4894AD1-F9A7-480E-8012-06BFC92B3558",
-    "letter": "f",
-    "number": 0,
+    "letter": "s",
+    "number": 8,
     "isOpened": false,
     "position": [-3.85217, -1.2366464, 1.3225927],
     "content": {
@@ -12,8 +12,8 @@
   },
   {
     "id": "2006DB88-2E26-444F-A447-8708E0E5AF52",
-    "letter": "r",
-    "number": 1,
+    "letter": "i",
+    "number": 14,
     "isOpened": false,
     "position": [-2.4494119, -1.7309525, 4.11279],
     "content": {
@@ -23,8 +23,8 @@
   },
   {
     "id": "5364954A-5464-4221-A5AF-A1CC444B573D",
-    "letter": "a",
-    "number": 2,
+    "letter": "r",
+    "number": 16,
     "isOpened": false,
     "position": [-2.9244761, -1.226574, 7.2167225],
     "content": {
@@ -34,8 +34,8 @@
   },
   {
     "id": "79273343-AB8B-4DA4-8F61-757A6ADFFAB1",
-    "letter": "c",
-    "number": 3,
+    "letter": "a",
+    "number": 5,
     "isOpened": false,
     "position": [-5.550076, -1.5398812, 5.7376547],
     "content": {
@@ -45,8 +45,8 @@
   },
   {
     "id": "C309B2D8-7EBC-4818-A01E-98CC9AECC34A",
-    "letter": "t",
-    "number": 4,
+    "letter": "o",
+    "number": 15,
     "isOpened": false,
     "position": [-7.4950724, -0.83283293, 3.4227319],
     "content": {
@@ -56,8 +56,8 @@
   },
   {
     "id": "34E2209F-C8DD-449A-A3CD-685261E12BB6",
-    "letter": "a",
-    "number": 5,
+    "letter": "t",
+    "number": 4,
     "isOpened": false,
     "position": [-6.010258, -1.1702622, 2.5949674],
     "content": {
@@ -67,8 +67,8 @@
   },
   {
     "id": "2B29BFBC-A84C-4D1A-8772-BBBEAE884B19",
-    "letter": "l",
-    "number": 6,
+    "letter": "e",
+    "number": 12,
     "isOpened": false,
     "position": [-3.6796792, -1.1276398, 2.9212298],
     "content": {
@@ -78,8 +78,8 @@
   },
   {
     "id": "E384AA1F-48B6-4030-8F58-2F22A9CAEB3C",
-    "letter": "i",
-    "number": 7,
+    "letter": "f",
+    "number": 0,
     "isOpened": false,
     "position": [-0.6500666, -0.99537015, 2.6401472],
     "content": {
@@ -89,8 +89,8 @@
   },
   {
     "id": "BDCF1586-6E8B-4C65-ABF8-48D7B486FE05",
-    "letter": "s",
-    "number": 8,
+    "letter": "u",
+    "number": 10,
     "isOpened": false,
     "position": [1.5108875, -1.7551658, 3.3500211],
     "content": {
@@ -100,8 +100,8 @@
   },
   {
     "id": "47630883-A957-4093-81B9-177B307472E4",
-    "letter": "s",
-    "number": 9,
+    "letter": "r",
+    "number": 1,
     "isOpened": false,
     "position": [1.2818848, -1.0079191, -1.1644285],
     "content": {
@@ -111,8 +111,8 @@
   },
   {
     "id": "AF1816AA-1F20-4E53-8946-F437A00771FB",
-    "letter": "u",
-    "number": 10,
+    "letter": "l",
+    "number": 6,
     "isOpened": false,
     "position": [2.9147274, -0.5981271, -2.3488433],
     "content": {
@@ -122,8 +122,8 @@
   },
   {
     "id": "22027E0B-8768-427C-B714-EE08C31485BF",
-    "letter": "p",
-    "number": 11,
+    "letter": "r",
+    "number": 13,
     "isOpened": false,
     "position": [4.3292785, -0.8292422, -1.4397475],
     "content": {
@@ -133,8 +133,8 @@
   },
   {
     "id": "9B18FFC0-1146-4065-B305-9610765B04BF",
-    "letter": "e",
-    "number": 12,
+    "letter": "c",
+    "number": 3,
     "isOpened": false,
     "position": [4.8155813, -0.3383062, -0.47527114],
     "content": {
@@ -144,8 +144,8 @@
   },
   {
     "id": "36E672D0-5936-48C9-A0D8-B007F48CCE17",
-    "letter": "r",
-    "number": 13,
+    "letter": "p",
+    "number": 11,
     "isOpened": false,
     "position": [4.5663314, -0.25317886, 0.0575675],
     "content": {
@@ -155,8 +155,8 @@
   },
   {
     "id": "4874A39D-53D9-4960-BBF9-E2CCD1B898D6",
-    "letter": "i",
-    "number": 14,
+    "letter": "a",
+    "number": 2,
     "isOpened": false,
     "position": [3.047569, -0.8571077, 0.86062133],
     "content": {
@@ -166,8 +166,8 @@
   },
   {
     "id": "473AECD2-0934-434E-B3B5-783B91C4AAFA",
-    "letter": "o",
-    "number": 15,
+    "letter": "s",
+    "number": 9,
     "isOpened": false,
     "position": [5.7503157, -1.598124, 2.5234578],
     "content": {
@@ -177,8 +177,8 @@
   },
   {
     "id": "4521078A-5625-4064-A523-BF623A7CFFC4",
-    "letter": "r",
-    "number": 16,
+    "letter": "i",
+    "number": 7,
     "isOpened": false,
     "position": [2.2703106, -1.605427, 2.4089541],
     "content": {

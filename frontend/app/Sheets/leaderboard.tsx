@@ -14,6 +14,8 @@ export const Leaderboard = () => {
 
   const columns = ['Rank', 'Name', 'Capsules', 'Time'];
 
+  const sortedLeaderboard = [...leaderBoard].sort((a, b) => a.rank - b.rank);
+
   const renderHeaders = () => (
     <View style={[styles.row, styles.header]}>
       {columns.map(el => (
@@ -37,7 +39,7 @@ export const Leaderboard = () => {
   return (
     <FlatList
       style={styles.container}
-      data={leaderBoard}
+      data={sortedLeaderboard}
       keyExtractor={item => item.id}
       renderItem={renderItem}
       ListHeaderComponent={renderHeaders}

@@ -134,9 +134,15 @@ class ARWorldMapView: ARSCNView, ARSCNViewDelegate, ARSessionDelegate {
 
     func placeCapsules(capsules: [[String: Any]]) {
         capsulesEnabled = true
-        // Render any anchors that arrived before capsules were enabled
+
+        // Build set of valid capsule IDs from backend data
+        knownCapsuleIDs = Set(capsules.compactMap { $0["id"] as? String })
+
+        // Only render pending anchors that match a known capsule
         for (node, anchor) in pendingAnchors {
-            renderCapsule(on: node, for: anchor)
+            if let name = anchor.name, knownCapsuleIDs.contains(name) {
+                renderCapsule(on: node, for: anchor)
+            }
         }
         pendingAnchors.removeAll()
 
@@ -172,6 +178,7 @@ class ARWorldMapView: ARSCNView, ARSCNViewDelegate, ARSessionDelegate {
     }
 
     private var capsuleColors: [String: UIColor] = [:]
+    private var knownCapsuleIDs: Set<String> = []
     private var renderedAnchorIDs: Set<String> = []
 
     // Tap handling
@@ -219,6 +226,10 @@ class ARWorldMapView: ARSCNView, ARSCNViewDelegate, ARSessionDelegate {
 
     private func renderCapsule(on node: SCNNode, for anchor: ARAnchor) {
         guard let name = anchor.name, !name.isEmpty else { return }
+        guard knownCapsuleIDs.isEmpty || knownCapsuleIDs.contains(name) else {
+            print("[ARWorldMapView] Skipping unknown anchor: \(name)")
+            return
+        }
         guard !renderedAnchorIDs.contains(name) else {
             print("[ARWorldMapView] Skipping duplicate anchor: \(name)")
             return
