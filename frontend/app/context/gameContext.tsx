@@ -46,26 +46,14 @@ export function GameProvider({ children }: { children: React.ReactNode }) {
   const [capsules, setCapsules] = useState<Map<string, Capsule>>(new Map());
   const [selectedCapsule, setSelectedCapsule] = useState<Capsule | null>(null);
   const [endTime, setEndTime] = useState<number>(0);
-  const [escapePhrase, setEscapePhrase] = useState<(string | null)[]>([
-    null,
-    null,
-    null,
-    null,
-    null,
-    null,
-    null,
-    null,
-    null,
-    null,
-    null,
-    null,
-    null,
-    null,
-    null,
-    null,
-    null,
-  ]);
+  const [escapePhrase, setEscapePhrase] = useState<(string | null)[]>(
+    new Array(17).fill(null),
+  );
+  const [endResult, setEndResult] = useState<'win' | 'lose' | null>(null);
+  const [winCompletedAt, setWinCompletedAt] = useState<string | null>(null);
   const websocket = useRef<Socket | null>(null);
+  const playerIdRef = useRef<string | null>(null);
+  const endResultRef = useRef<'win' | 'lose' | null>(null);
 
   const handleNameChange = (text: string) => {
     setNewName(text);
@@ -104,16 +92,38 @@ export function GameProvider({ children }: { children: React.ReactNode }) {
       console.log('gameStart received!');
       setGameState('playing');
       setEndTime(data); // data = endsAt value
+      endResultRef.current = null;
+      setEndResult(null);
+      setWinCompletedAt(null);
+      setCapsules(prev => {
+        const next = new Map(prev);
+        next.forEach((c, key) => next.set(key, { ...c, isOpened: false }));
+        return next;
+      });
+      setEscapePhrase(new Array(17).fill(null));
+      setSelectedCapsule(null);
     });
 
     // listens for server emit leaderboard update
     websocket.current.on('leaderboardUpdate', (data: PlayerState[]) => {
       setLeaderBoard(data);
+
+      const player = data.find(p => p.id === playerIdRef.current);
+      if (player && player.capsules === 17 && endResultRef.current === null) {
+        endResultRef.current = 'win';
+        setEndResult('win');
+        setWinCompletedAt(player.completedAt);
+        setSelectedCapsule(null);
+      }
     });
 
     // listens for server emit game over state
     websocket.current.on('gameOver', () => {
       setGameState('gameOver');
+      if (endResultRef.current === null) {
+        endResultRef.current = 'lose';
+        setEndResult('lose');
+      }
     });
   };
 
@@ -128,21 +138,33 @@ export function GameProvider({ children }: { children: React.ReactNode }) {
         return next;
       });
       setSelectedCapsule(newCapsule);
-      const updatedEscapePhrase = [...escapePhrase];
-      updatedEscapePhrase[capsule.number] = capsule.letter;
-      setEscapePhrase(updatedEscapePhrase);
+      setEscapePhrase(prev => {
+        const updated = [...prev];
+        updated[capsule.number] = capsule.letter;
+        return updated;
+      });
 
       // emit event to update player state and leaderboard
       websocket.current?.emit('openCapsule', playerState?.id);
+    } else {
+      setSelectedCapsule(capsule);
     }
+  };
 
-    setSelectedCapsule(capsule);
-    // updating player's progress on escape phrase
+  const triggerLocalGameOver = () => {
+    if (endResultRef.current !== null) return;
+    setGameState('gameOver');
+    endResultRef.current = 'lose';
+    setEndResult('lose');
   };
 
   useEffect(() => {
     fetchCapsules();
   }, []);
+
+  useEffect(() => {
+    playerIdRef.current = playerState?.id ?? null;
+  }, [playerState]);
 
   //fire this once the user submit name
   const createPlayer = async (): Promise<PlayerState> => {
@@ -188,6 +210,9 @@ export function GameProvider({ children }: { children: React.ReactNode }) {
         setGameState,
         endTime,
         setEndTime,
+        endResult,
+        winCompletedAt,
+        triggerLocalGameOver,
         openCapsule,
         webSocketConnection,
       }}
