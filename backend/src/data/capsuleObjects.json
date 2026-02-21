@@ -1,21 +1,21 @@
 [
   {
-    "id": "246F1371-4281-434D-A8D7-BD759339E2C3",
+    "id": "E4894AD1-F9A7-480E-8012-06BFC92B3558",
     "letter": "f",
     "number": 0,
     "isOpened": false,
-    "position": [-0.56238955, -1.0296211, -2.9753716],
+    "position": [-3.85217, -1.2366464, 1.3225927],
     "content": {
       "name": "Jonathan",
       "funFact": "Once prescribed a patient 'more bike lanes' and filed it as a legitimate medical recommendation"
     }
   },
   {
-    "id": "2F337ABD-5F02-4C63-8A0A-07D3F483FB4F",
+    "id": "2006DB88-2E26-444F-A447-8708E0E5AF52",
     "letter": "r",
     "number": 1,
     "isOpened": false,
-    "position": [1.0773207, -1.4203029, -5.7642527],
+    "position": [-2.4494119, -1.7309525, 4.11279],
     "content": {
       "name": "Hart",
       "funFact": "Composed an entire symphony while performing piano on a sinking cruise ship and the audience didn't notice either thing"
@@ -26,161 +26,161 @@
     "letter": "a",
     "number": 2,
     "isOpened": false,
-    "position": [-0.08299859, -0.39618805, -5.8069506],
+    "position": [-2.9244761, -1.226574, 7.2167225],
     "content": {
       "name": "Josh",
       "funFact": "Built a pottery wheel out of IKEA furniture parts because he couldn't choose between his two passions"
     }
   },
   {
-    "id": "FE8CEC06-6DBF-4E8F-9694-1AD2F6C338C4",
+    "id": "79273343-AB8B-4DA4-8F61-757A6ADFFAB1",
     "letter": "c",
     "number": 3,
     "isOpened": false,
-    "position": [-3.306607, -1.2889034, 0.36745882],
+    "position": [-5.550076, -1.5398812, 5.7376547],
     "content": {
       "name": "Joe",
       "funFact": "Left NYC for the west coast for 10 years, realized it was a bug, and rolled back to main"
     }
   },
   {
-    "id": "CE6DA62B-1BE0-49A6-A380-C599326B1255",
+    "id": "C309B2D8-7EBC-4818-A01E-98CC9AECC34A",
     "letter": "t",
     "number": 4,
     "isOpened": false,
-    "position": [-5.7731457, 0.15901937, -0.70665884],
+    "position": [-7.4950724, -0.83283293, 3.4227319],
     "content": {
       "name": "Erik",
       "funFact": "Debugged some code while skydiving and still made it to rugby practice on time"
     }
   },
   {
-    "id": "9F77BB52-06BF-4E95-B3A2-212DF80381FF",
+    "id": "34E2209F-C8DD-449A-A3CD-685261E12BB6",
     "letter": "a",
     "number": 5,
     "isOpened": false,
-    "position": [-5.596011, -1.3078748, -5.2870603],
+    "position": [-6.010258, -1.1702622, 2.5949674],
     "content": {
       "name": "Beckham",
       "funFact": "Treats his wardrobe like a GitHub repo — every outfit is version-controlled and nobody has ever seen the same commit twice"
     }
   },
   {
-    "id": "3F2AB5AA-2A5D-4AA2-9189-FF0207343F85",
+    "id": "2B29BFBC-A84C-4D1A-8772-BBBEAE884B19",
     "letter": "l",
     "number": 6,
     "isOpened": false,
-    "position": [-7.7328525, -1.1824245, -2.513661],
+    "position": [-3.6796792, -1.1276398, 2.9212298],
     "content": {
       "name": "Conor",
       "funFact": "Once published an art magazine, starred in an abstract film, and did standup comedy all in the same week — and still found time to procrastinate"
     }
   },
   {
-    "id": "D728402E-5B9B-4D31-9F66-416D8A1D08C8",
+    "id": "E384AA1F-48B6-4030-8F58-2F22A9CAEB3C",
     "letter": "i",
     "number": 7,
     "isOpened": false,
-    "position": [-3.6493955, -1.3590314, -3.2522407],
+    "position": [-0.6500666, -0.99537015, 2.6401472],
     "content": {
       "name": "Aaron",
       "funFact": "Believed he would become a wizard as a child and honestly the way he bikes through Chicago winters he might actually be one"
     }
   },
   {
-    "id": "3410F048-659A-41B3-8186-B5B7EDBE6069",
+    "id": "BDCF1586-6E8B-4C65-ABF8-48D7B486FE05",
     "letter": "s",
     "number": 8,
     "isOpened": false,
-    "position": [-5.675649, -0.67606, -1.0521538],
+    "position": [1.5108875, -1.7551658, 3.3500211],
     "content": {
       "name": "John",
       "funFact": "Throat-sang his way to the top of a mountain and the mountain asked him to keep it down"
     }
   },
   {
-    "id": "9F206D06-4E70-4332-969B-77FEF188FF1D",
+    "id": "47630883-A957-4093-81B9-177B307472E4",
     "letter": "s",
     "number": 9,
     "isOpened": false,
-    "position": [-0.7855745, -1.2756395, 0.12392922],
+    "position": [1.2818848, -1.0079191, -1.1644285],
     "content": {
       "name": "Julian",
       "funFact": "Unicycled through the Egyptian pyramids while explaining Russian curse words to a group of confused tourists"
     }
   },
   {
-    "id": "F8BBFC93-C6AC-48E0-BDA9-3DC905B3DD0D",
+    "id": "AF1816AA-1F20-4E53-8946-F437A00771FB",
     "letter": "u",
     "number": 10,
     "isOpened": false,
-    "position": [1.4952594, -1.4690028, -0.22414224],
+    "position": [2.9147274, -0.5981271, -2.3488433],
     "content": {
       "name": "Marianne",
       "funFact": "Once ran an ARG so realistic the players accidentally filed their own taxes through it"
     }
   },
   {
-    "id": "35179137-F962-4745-88F5-BA84BD4BD9B7",
+    "id": "22027E0B-8768-427C-B714-EE08C31485BF",
     "letter": "p",
     "number": 11,
     "isOpened": false,
-    "position": [4.154021, -1.0656818, -1.0067784],
+    "position": [4.3292785, -0.8292422, -1.4397475],
     "content": {
       "name": "German",
       "funFact": "Managed a golf course by day and deadlifted the lawnmower by night because gym memberships are expensive"
     }
   },
   {
-    "id": "CABC61D5-0B01-4E6A-AB42-3CA324D99F43",
+    "id": "9B18FFC0-1146-4065-B305-9610765B04BF",
     "letter": "e",
     "number": 12,
     "isOpened": false,
-    "position": [0.74801135, -1.477256, -5.0224433],
+    "position": [4.8155813, -0.3383062, -0.47527114],
     "content": {
       "name": "Lily",
       "funFact": "Has lived in so many cities that Google Maps sends her Christmas cards and Lana Del Rey personally thanks her for 40% of all streams"
     }
   },
   {
-    "id": "54D0F24D-9832-4CB7-95D6-C6B412CD077F",
+    "id": "36E672D0-5936-48C9-A0D8-B007F48CCE17",
     "letter": "r",
     "number": 13,
     "isOpened": false,
-    "position": [4.382811, -1.4386905, -5.91986],
+    "position": [4.5663314, -0.25317886, 0.0575675],
     "content": {
       "name": "Ulysse",
       "funFact": "Made computer graphics so psychedelic in Taiwan that his GPU filed for emotional damages"
     }
   },
   {
-    "id": "2299F677-5E41-4382-9BC6-B9FE371D6B26",
+    "id": "4874A39D-53D9-4960-BBF9-E2CCD1B898D6",
     "letter": "i",
     "number": 14,
     "isOpened": false,
-    "position": [2.826295, -0.39655805, -6.162721],
+    "position": [3.047569, -0.8571077, 0.86062133],
     "content": {
       "name": "Frank",
       "funFact": "Has survived so many bad software interviews that he could write a bestselling horror novel — didkyriesayit.com was just the therapy"
     }
   },
   {
-    "id": "1FB5F6DA-5AD6-4ACF-A091-31AC6230A88C",
+    "id": "473AECD2-0934-434E-B3B5-783B91C4AAFA",
     "letter": "o",
     "number": 15,
     "isOpened": false,
-    "position": [2.803368, -1.4505684, -1.6394805],
+    "position": [5.7503157, -1.598124, 2.5234578],
     "content": {
       "name": "Julianna",
       "funFact": "Once backpacked through all the Nordic regions and the Northern Lights started following them out of curiosity"
     }
   },
   {
-    "id": "A8479A31-8220-4FE5-B5CB-C39C62F03F1E",
+    "id": "4521078A-5625-4064-A523-BF623A7CFFC4",
     "letter": "r",
     "number": 16,
     "isOpened": false,
-    "position": [-0.91573715, -1.474879, -4.261113],
+    "position": [2.2703106, -1.605427, 2.4089541],
     "content": {
       "name": "Cono",
       "funFact": "Has such an encyclopedic knowledge of plumbing that toilets flush themselves out of respect when he walks into a room"
