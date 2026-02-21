@@ -5,7 +5,7 @@
 // Flow: onViewReady → startSessionFromBundle('arworldmap.data') → ARKit relocalizes →
 //       placeCapsules() → renderer renders spheres → tap fires JS event
 
-import React, { useEffect } from 'react';
+import React, { useEffect, useState, useRef } from 'react';
 import { View, Text, StyleSheet, Button } from 'react-native';
 import { ARWorldMapView } from '../native/ARWorldMapView';
 import ARWorldMapModule from '../native/ARWorldMapModule';
@@ -15,6 +15,7 @@ import { useGame } from '../context/gameContext';
 import { useAR } from '../context/arContext';
 import { Onboarding } from '../components/onboarding';
 import { Hud } from '../components/hud';
+import Countdown from '../components/Countdown';
 
 export default function ARScreen({
   navigation,
@@ -39,14 +40,24 @@ export default function ARScreen({
   } = game;
   const { localizeWorld, trackingStatus, relocalized } = ar;
 
+  // Countdown state and refs
+  const [showCountdown, setShowCountdown] = useState(false);
+  const showCountdownRef = useRef(false);
+  const countdownShownRef = useRef(gameState === 'playing');
+
   // Start AR session and listen for relocalization
   useEffect(() => {
     const cleanup = localizeWorld();
     return cleanup;
   }, []);
 
-  // Listen for game state to change to gameOver then display final leaderboard
+  // Trigger countdown when game starts, navigate to leaderboard on game over
   useEffect(() => {
+    if (gameState === 'playing' && !countdownShownRef.current) {
+      setShowCountdown(true);
+      showCountdownRef.current = true;
+      countdownShownRef.current = true;
+    }
     if (gameState === 'gameOver') {
       navigation.navigate('LeaderBoard');
     }
@@ -70,7 +81,7 @@ export default function ARScreen({
   // Listen for capsule taps from native AR view
   useEffect(() => {
     const tapSub = ARWorldMapModule.onCapsuleTapped(e => {
-      if (!capsules) return null;
+      if (!capsules || showCountdownRef.current) return null;
       const capsule = capsules.get(e.capsuleId);
       if (capsule) {
         openCapsule(capsule);
@@ -89,6 +100,14 @@ export default function ARScreen({
   return (
     <View style={styles.container}>
       <ARWorldMapView style={styles.arView} />
+      {showCountdown && (
+        <Countdown
+          onComplete={() => {
+            setShowCountdown(false);
+            showCountdownRef.current = false;
+          }}
+        />
+      )}
       <View style={styles.overlay}>
         <Text style={styles.statusText}>Tracking: {trackingStatus}</Text>
         {gameState === 'playing' ? <Hud /> : <Onboarding />}
